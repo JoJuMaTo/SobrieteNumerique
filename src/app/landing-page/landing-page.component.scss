@@ -1,0 +1,23 @@
+.greetings {
+  display: flex;
+  flex-direction: column; }
+
+h1 {
+  background-color: transparent;
+  font-size: 5em;
+  margin-top: 300px;
+  color: darkred;
+  text-align: center; }
+
+
+.buttonContainer {
+  display: flex;
+  justify-content: center; }
+
+.ButtonOne {
+  margin-right: 10px; }
+
+.ButtonTwo {
+  margin-left: 10px; }
+
+/*# sourceMappingURL=landing-page.component.css.map */
