@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BreakpointObserver, Breakpoints, BreakpointState} from "@angular/cdk/layout";
+import {ResponsiveService} from "../core/services/responsive.service";
 
 @Component({
   selector: 'app-landing-page',
@@ -8,32 +8,20 @@ import {BreakpointObserver, Breakpoints, BreakpointState} from "@angular/cdk/lay
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss'
 })
-export class LandingPageComponent implements OnInit{
+export class LandingPageComponent implements OnInit {
 
   isMobile!: boolean;
 
-  constructor(private responsive: BreakpointObserver) {}
+  constructor(private responsiveService: ResponsiveService) {}
 
   ngOnInit() {
-    this.responsive.observe([
-      Breakpoints.XSmall,
-      Breakpoints.Small,
-      Breakpoints.Medium,
-      Breakpoints.Large,
-      Breakpoints.XLarge
-    ]).subscribe((state: BreakpointState) => {
-      if (state.matches) {
-        if (state.breakpoints[Breakpoints.XSmall] || state.breakpoints[Breakpoints.Small]) {
-          console.log("Mode mobile détecté");
-          this.isMobile = true;
-        } else {
-          console.log("Mode desktop détecté");
-          this.isMobile = false;
-        }
+    this.responsiveService.isMobile$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+      if (isMobile) {
+        console.log("Mode mobile détecté");
+      } else {
+        console.log("Mode desktop détecté");
       }
     });
   }
-
-
-
 }
