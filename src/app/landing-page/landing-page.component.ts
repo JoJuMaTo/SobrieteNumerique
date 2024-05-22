@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
+import {BreakpointObserver, Breakpoints, BreakpointState} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-landing-page',
@@ -11,34 +10,29 @@ import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 })
 export class LandingPageComponent implements OnInit{
 
-  isMobile = true;
+  isMobile!: boolean;
 
-constructor(private _router: Router, private responsive: BreakpointObserver) { }
+  constructor(private responsive: BreakpointObserver) {}
 
-ngOnInit() {
-  this.responsive.observe(Breakpoints.Small)
-    .subscribe(result => {
-
-      if (result.matches) {
-        console.log("passage en mobile OK");
-        this.isMobile = true;
-        if (!result.matches) {
-          console.log("surtie du mode mobile");
+  ngOnInit() {
+    this.responsive.observe([
+      Breakpoints.XSmall,
+      Breakpoints.Small,
+      Breakpoints.Medium,
+      Breakpoints.Large,
+      Breakpoints.XLarge
+    ]).subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        if (state.breakpoints[Breakpoints.XSmall] || state.breakpoints[Breakpoints.Small]) {
+          console.log("Mode mobile détecté");
+          this.isMobile = true;
+        } else {
+          console.log("Mode desktop détecté");
           this.isMobile = false;
         }
       }
-
     });
-  this.responsive.observe(Breakpoints.Large)
-    .subscribe(result => {
-
-      if (result.matches) {
-        console.log("sortie du mode mobile");
-        this.isMobile = false;
-             }
-
-    });
-}
+  }
 
 
 
