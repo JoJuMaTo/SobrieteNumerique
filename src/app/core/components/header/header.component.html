@@ -1,1 +1,19 @@
-<p>header works!</p>
+
+
+<header [ngClass]="{'header-mobile': isMobile, 'header-desktop': !isMobile }" >
+  <div class="titles">
+    <h1 [ngClass]="{'h1-mobile': isMobile, 'h1-desktop': !isMobile }" (click)="goHome()">Sobriété Numérique</h1>
+    <nav class="titles">
+      <ng-container *ngIf="isLoggedIn | async; then loggedInBlock; else loggedOutBlock"></ng-container>
+      <ng-template #loggedInBlock>
+        <h2 [ngClass]="{'login-mobile': isMobile, 'login-desktop': !isMobile }" routerLink="/login">{{ username$ | async }}</h2>
+        <h3 class="logout" (click)="showModal = true">🚪</h3>
+        <app-custom-modal *ngIf="showModal" [message]="'logout: Sure ? ?'" (confirm)="handleConfirmation($event)"></app-custom-modal>
+      </ng-template>
+      <ng-template #loggedOutBlock>
+        <h2 [ngClass]="{'login-mobile': isMobile, 'login-desktop': !isMobile }" class="login" routerLink="/login">Login</h2>
+      </ng-template>
+
+    </nav>
+  </div>
+</header>
