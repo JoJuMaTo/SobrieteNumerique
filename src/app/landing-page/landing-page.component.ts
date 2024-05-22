@@ -11,7 +11,7 @@ import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 })
 export class LandingPageComponent implements OnInit{
 
-  isMobile = false;
+  isMobile = true;
 
 constructor(private _router: Router, private responsive: BreakpointObserver) { }
 
