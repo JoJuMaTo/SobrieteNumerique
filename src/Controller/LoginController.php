@@ -8,12 +8,38 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class LoginController extends AbstractController
 {
-    #[Route('/login', name: 'app_login')]
+    #[Route('/user/login', name: 'app_login')]
+    public function login(): JsonResponse
+    {
+        return $this->json([
+            'message' => 'Welcome to your new controller!',
+
+        ]);
+    }
+    #[Route('/user/register', name: 'app_register')]
     public function index(): JsonResponse
     {
         return $this->json([
             'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/LoginController.php',
+
+        ]);
+    }
+
+    #[Route('/user/delete', name: 'app_delete')]
+    public function delete(): JsonResponse
+    {
+        return $this->json([
+            'message' => 'Welcome to your new controller!',
+
+        ]);
+    }
+
+    #[Route('/user/update', name: 'app_update')]
+    public function update(): JsonResponse
+    {
+        return $this->json([
+            'message' => 'Welcome to your new controller!',
+
         ]);
     }
 }
