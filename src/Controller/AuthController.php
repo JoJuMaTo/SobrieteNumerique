@@ -7,6 +7,7 @@ use App\Service\TokenProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Random\RandomException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,12 +36,19 @@ class AuthController extends AbstractController
     }
 
     /**
-     * @throws RandomException
+     * @throws RandomException|\JsonException
      */
     #[Route('/user/login', name: 'api_auth_login_user', methods: ['POST'])]
     public function userLogin(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider): JsonResponse
     {
-        $username = $request->request->get('username');
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return new JsonResponse(['error' => 'Invalid JSON: ' . $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+        $username = $data['username'];
+        $password = $data['password'];
+        //$username = $request->request->get('username');
 
         $user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
         if ($user === null) {
@@ -49,7 +57,7 @@ class AuthController extends AbstractController
                 'username' => $username,
             ], Response::HTTP_UNAUTHORIZED);
         }
-        $password = $request->request->get('password');
+        //$password = $request->request->get('password');
 
         if (!$passwordHasher->isPasswordValid($user, $password)) {
             return new JsonResponse(['error' => 'Invalid credentials',
