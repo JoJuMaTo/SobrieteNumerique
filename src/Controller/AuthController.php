@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\TokenProvider;
 use Doctrine\ORM\EntityManagerInterface;
+use Random\RandomException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,8 +34,11 @@ class AuthController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws RandomException
+     */
     #[Route('/user/login', name: 'api_auth_login_user', methods: ['POST'])]
-    public function userLogin(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
+    public function userLogin(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider): JsonResponse
     {
         $username = $request->request->get('username');
 
@@ -41,6 +46,7 @@ class AuthController extends AbstractController
         if ($user === null) {
             return $this->json([
                 'message' => 'missing credentials',
+                'username' => $username,
             ], Response::HTTP_UNAUTHORIZED);
         }
         $password = $request->request->get('password');
@@ -53,11 +59,11 @@ class AuthController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        //$token = $tokenProvider->createToken($user); // somehow create an API token for $user
+        $token = $tokenProvider->createToken($user);
 
         return $this->json([
             'user'  => $user->getUserIdentifier(),
-            //'token' => $token,
+            'token' => $token->getToken(),
         ]);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, AccessToken>
+     */
+    #[ORM\OneToMany(targetEntity: AccessToken::class, mappedBy: 'user')]
+    private Collection $expiresAt;
+
+    public function __construct()
+    {
+        $this->expiresAt = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,5 +117,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, AccessToken>
+     */
+    public function getExpiresAt(): Collection
+    {
+        return $this->expiresAt;
+    }
+
+    public function addExpiresAt(AccessToken $expiresAt): static
+    {
+        if (!$this->expiresAt->contains($expiresAt)) {
+            $this->expiresAt->add($expiresAt);
+            $expiresAt->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExpiresAt(AccessToken $expiresAt): static
+    {
+        if ($this->expiresAt->removeElement($expiresAt)) {
+            // set the owning side to null (unless already changed)
+            if ($expiresAt->getUser() === $this) {
+                $expiresAt->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

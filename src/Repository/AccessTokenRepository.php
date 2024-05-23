@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Repository;
+
+use App\Entity\AccessToken;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+
+/**
+ * @extends ServiceEntityRepository<AccessToken>
+ */
+class AccessTokenRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, AccessToken::class);
+    }
+
+    //    /**
+    //     * @return AccessToken[] Returns an array of AccessToken objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('a')
+    //            ->andWhere('a.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('a.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
+
+    //    public function findOneBySomeField($value): ?AccessToken
+    //    {
+    //        return $this->createQueryBuilder('a')
+    //            ->andWhere('a.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
+    public function findOneByValue(string $accessToken) : ?AccessToken
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.token = :token')
+            ->setParameter('token', $accessToken)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+}
