@@ -49,8 +49,8 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.authService.login(this.credentials).subscribe({
       next: () => {
-        this.router.navigate(['juxbar/profile']);  // Assurez-vous que la route est correcte
-      },
+        this.router.navigate(['/']);
+        },
       error: error => {
         this.message = 'Échec de la connexion, vérifiez votre nom d’utilisateur/mot de passe';
         console.error('Login error', error);
