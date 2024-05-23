@@ -36,11 +36,16 @@ export class AuthService {
   }
 
   login(credentials: { username: string; password: string }): Observable<string> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    const headers = new HttpHeaders({ 'Content-Type': 'x-www-form-urlencoded; charset=UTF-8' });
     const body = new URLSearchParams(credentials);
 
+    // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    // const body = JSON.stringify(credentials);
+
+    console.log("données transmises : " + body);
     return this.http.post<string>(this.loginUrl, body.toString(), { headers, responseType: 'text' as 'json' })
       .pipe(
+
         tap(token => {
           localStorage.setItem('token', token);
           this.setAuthState(true, credentials.username);
