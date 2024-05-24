@@ -2,10 +2,10 @@
 
 <form (submit)="login()" method="post">
   <div>
-    <input type="text" [(ngModel)]="credentials.username" name="username" required>
+    <input [(ngModel)]="credentials.username" name="username" required type="text">
   </div>
   <div>
-    <input type="password" [(ngModel)]="credentials.password" name="password" required>
+    <input [(ngModel)]="credentials.password" name="password" required type="password">
   </div>
   <button type="submit">Login</button>
 </form>

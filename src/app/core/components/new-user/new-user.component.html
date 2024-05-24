@@ -1,1 +1,14 @@
 <p>new-user works!</p>
+<form [formGroup]="userForm">
+  <div>
+    <label for="username">email</label>
+    <input formControlName="username" id="username" type="email">
+  </div>
+  <div>
+    <label for="password">password</label>
+    <input formControlName="password" id="password" type="password">
+  </div>
+  <div class="action-buttons">
+  <button (click)="onSubmitForm()" [disabled]="userForm.invalid" type="submit">CREATE</button>
+  </div>
+</form>

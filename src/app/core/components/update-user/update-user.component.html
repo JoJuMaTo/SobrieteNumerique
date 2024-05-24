@@ -1,0 +1,15 @@
+<p>update-user works!</p>
+
+<form [formGroup]="passwordForm">
+  <div>
+    <label for="oldpassword">old password</label>
+    <input formControlName="oldpassword" id="oldpassword" type="password">
+  </div>
+  <div>
+    <label for="newpassword">new password</label>
+    <input formControlName="newpassword" id="newpassword" type="password">
+  </div>
+  <div class="action-buttons">
+    <button (click)="onSubmitForm()" type="submit">UPDATE</button>
+  </div>
+</form>

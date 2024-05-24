@@ -14,7 +14,8 @@ export interface AuthRequest {
 export class AuthService {
   username = new BehaviorSubject<string | null>(localStorage.getItem('username'));
   loggedIn = new BehaviorSubject<boolean>(localStorage.getItem('isAuthenticated') === 'true');
-  private loginUrl!: string;
+  private loginUrl: string = 'http://192.168.88.79:8000/user/login';
+
 
   constructor(private http: HttpClient, private router: Router) {
   }
@@ -36,16 +37,14 @@ export class AuthService {
   }
 
   login(credentials: { username: string; password: string }): Observable<string> {
-    const headers = new HttpHeaders({ 'Content-Type': 'x-www-form-urlencoded; charset=UTF-8' });
-    const body = new URLSearchParams(credentials);
-
-    // const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    // const body = JSON.stringify(credentials);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    const body = new URLSearchParams();
+    body.set('username', credentials.username);
+    body.set('password', credentials.password);
 
     console.log("données transmises : " + body);
     return this.http.post<string>(this.loginUrl, body.toString(), { headers, responseType: 'text' as 'json' })
       .pipe(
-
         tap(token => {
           localStorage.setItem('token', token);
           this.setAuthState(true, credentials.username);
