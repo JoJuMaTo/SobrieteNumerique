@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
-import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Component({
@@ -23,7 +22,7 @@ export class UpdateUserComponent implements OnInit{
   @Input() user!: User;
 
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private http: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -46,8 +45,9 @@ export class UpdateUserComponent implements OnInit{
       token: localStorage.getItem('token')
     };
     console.log("PASSWORD DATA : " + JSON.stringify(userData) )
-    return this.http.put<string>(`${this.updateUrl}`,JSON.stringify(userData), {responseType: 'text' as 'json'});
 
-     // this.userService.updateUserPassword(userData).subscribe();
+    // return this.http.put<string>(`${this.updateUrl}`,JSON.stringify(userData), {responseType: 'text' as 'json'});
+
+     return this.userService.updateUserPassword(userData);
   }
 }
