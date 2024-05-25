@@ -33,7 +33,7 @@ class TokenProvider
         return $token;
     }
 
-    public function validateToken(string $token): ?UserInterface
+    public function validateToken(string $token): ?User
     {
         $tokenRepo = $this->entityManager->getRepository(AccessToken::class);
         $tokenEntity = $tokenRepo->findOneBy(['token' => $token]);
