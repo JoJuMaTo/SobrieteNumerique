@@ -2,14 +2,15 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {FormGroup} from "@angular/forms";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  registerUrl: string = 'http://192.168.88.79:8000/user/register';
-  updateUrl: string = 'http://192.168.88.79:8000/user/update';
+  registerUrl: string = `${environment.apiUrl}/user/register`;
+  updateUrl: string = `${environment.apiUrl}/user/update`;
 
 
   constructor(private http: HttpClient) {

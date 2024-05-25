@@ -2,7 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {User} from "../../models/user";
 import {UserService} from "../../services/user.service";
-import {Observable} from "rxjs";
+import {environment} from "../../../../environments/environment";
+import {map} from "rxjs/operators";
 
 @Component({
   selector: 'app-update-user',
@@ -15,7 +16,7 @@ import {Observable} from "rxjs";
 })
 export class UpdateUserComponent implements OnInit{
 
-  updateUrl: string = 'http://192.168.88.79:8000/user/update';
+  updateUrl: string = `${environment.apiUrl}/user/update`;
 
 
   passwordForm!: FormGroup;
@@ -38,7 +39,7 @@ export class UpdateUserComponent implements OnInit{
 
 
 
-  onSubmitForm(): Observable<string>{
+  onSubmitForm(): void{
 
     const userData = {
       ...this.passwordForm.value,
@@ -48,6 +49,8 @@ export class UpdateUserComponent implements OnInit{
 
     // return this.http.put<string>(`${this.updateUrl}`,JSON.stringify(userData), {responseType: 'text' as 'json'});
 
-     return this.userService.updateUserPassword(userData);
+     this.userService.updateUserPassword(userData).pipe(
+       map(result => console.log(result.toString())),
+     ).subscribe();
   }
 }

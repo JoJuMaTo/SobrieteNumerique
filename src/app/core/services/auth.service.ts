@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, catchError, Observable, tap, throwError} from 'rxjs';
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 export interface AuthRequest {
   username: string;
@@ -14,7 +15,7 @@ export interface AuthRequest {
 export class AuthService {
   username = new BehaviorSubject<string | null>(localStorage.getItem('username'));
   loggedIn = new BehaviorSubject<boolean>(localStorage.getItem('isAuthenticated') === 'true');
-  private loginUrl: string = 'http://192.168.88.79:8000/user/login';
+  private loginUrl: string = `${environment.apiUrl}/user/login`;
 
 
   constructor(private http: HttpClient, private router: Router) {

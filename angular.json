@@ -30,7 +30,22 @@
             "scripts": []
           },
           "configurations": {
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ]
+            },
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+
               "budgets": [
                 {
                   "type": "initial",
@@ -61,8 +76,12 @@
             },
             "development": {
               "buildTarget": "sobrieteNumerique:build:development"
+            },
+            "local": {
+              "buildTarget": "sobrieteNumerique:build:local"
             }
           },
+
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
@@ -71,6 +90,7 @@
             "buildTarget": "sobrieteNumerique:build"
           }
         },
+
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
