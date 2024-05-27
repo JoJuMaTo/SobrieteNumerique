@@ -55,4 +55,16 @@ class TokenProvider
             $this->entityManager->flush();
         }
     }
+
+    public function cleanGarbage(): void{
+        $tokenRepo = $this->entityManager->getRepository(AccessToken::class);
+        $tokens = $tokenRepo->findAll();
+        foreach ($tokens as $token) {
+            if($token->getExpiresAt() < new \DateTime()){
+                $this->entityManager->remove($token);
+                $this->entityManager->flush();
+            }
+        }
+
+    }
 }

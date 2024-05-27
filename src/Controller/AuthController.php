@@ -61,6 +61,7 @@ class AuthController extends AbstractController
         $username = $data['username'];
         $password = $data['password'];*/
         //For Form handling
+        $tokenProvider->cleanGarbage();
         $contentType = $request->headers->get("Content-Type");
 
         $username = $request->request->get('username');
@@ -97,47 +98,39 @@ class AuthController extends AbstractController
      * @throws ORMException|\JsonException
      */
     #[Route('/user/update', name: 'api_auth_update', methods: ['PUT'])]
-    public function updateUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider): JsonResponse
+    public function updateUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider, TokenExtractor $tokenExtractor): JsonResponse
     {
         try {
             $userdata = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         }catch (JsonException $e) {
             return new JsonResponse(['error' => 'Invalid JSON: ' . $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-        //$token = $request->headers->get('Authorization');
-        //$token =
-        $token = $userdata['token'];
+
+        $token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
 
         if($user === null){
+
             return $this->json(['error' => 'Invalid token'], Response::HTTP_BAD_REQUEST);
         }
 
         $username = $user->getUsername();
-        //$user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
         $newPassword = $userdata['newpassword'];
         $oldPassword = $userdata['oldpassword'];
-        /*$username = $request->request->get('username');
-        $oldPassword = $request->request->get('oldpassword');
-        $newPassword = $request->request->get('newpassword');*/
-        //$user = $entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
-        if ($oldPassword === $newPassword || $username !== $user->getUsername() ) {
+
+        if ($oldPassword === $newPassword || $username !== $user->getUsername()) {
             if($oldPassword === $newPassword){
                 return $this->json(['message' => 'Error : Old and New are the Same'], Response::HTTP_OK);
             }
+
             return $this->json([
                 'message' => 'missing credentials',
                 'username' => $username,
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-
-
         if (!$passwordHasher->isPasswordValid($user, $oldPassword)) {
-            return new JsonResponse(['error' => 'Invalid credentials',
-                'username' => $username,
-                'password' => $oldPassword,
-                'check_password' => $passwordHasher->isPasswordValid($user, $oldPassword),
+            return new JsonResponse(['error' => 'Invalid credentials'
             ], Response::HTTP_UNAUTHORIZED);
         }
         $hashedPassword = $passwordHasher->hashPassword($user, $newPassword);
