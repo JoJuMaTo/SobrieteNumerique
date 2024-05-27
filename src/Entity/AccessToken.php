@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AccessTokenRepository;
+use App\Service\TokenProvider;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\User;
 
@@ -63,5 +64,10 @@ class AccessToken
         $this->expiresAt = $expiresAt;
 
         return $this;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user->getId();
     }
 }

@@ -18,6 +18,7 @@ security:
             provider: app_user_provider
             access_token:
                 token_handler: App\Security\AccessTokenHandler
+                token_extractors: App\Security\TokenExtractor
 
 
             # activate different ways to authenticate

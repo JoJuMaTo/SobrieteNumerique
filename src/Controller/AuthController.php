@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Security\TokenExtractor;
 use App\Service\TokenProvider;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -96,9 +97,8 @@ class AuthController extends AbstractController
      * @throws ORMException|\JsonException
      */
     #[Route('/user/update', name: 'api_auth_update', methods: ['PUT'])]
-    public function updateUser(Request $request, EntityManager $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider): JsonResponse
+    public function updateUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider): JsonResponse
     {
-        echo "Update";
         try {
             $userdata = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         }catch (JsonException $e) {
@@ -108,6 +108,7 @@ class AuthController extends AbstractController
         //$token =
         $token = $userdata['token'];
         $user = $tokenProvider->validateToken($token);
+
         if($user === null){
             return $this->json(['error' => 'Invalid token'], Response::HTTP_BAD_REQUEST);
         }
@@ -144,4 +145,23 @@ class AuthController extends AbstractController
         $entityManager->flush();
         return new JsonResponse (['message' => 'Password updated with success !'], Response::HTTP_OK);
     }
+
+    #[Route('/user/delete', name: 'api_auth_delete', methods: ['DELETE'])]
+    public function deleteUser(Request $request, EntityManagerInterface $entityManager, TokenProvider $tokenProvider, TokenExtractor $tokenExtractor): JsonResponse
+    {
+
+        $token = $tokenExtractor->extractAccessToken($request);
+        //$token =
+        $user = $tokenProvider->validateToken($token);
+
+        if($user === null){
+            return $this->json(['error' => 'Invalid token'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return new JsonResponse (['message' => 'User delete with success !'], Response::HTTP_OK);
+    }
+
 }

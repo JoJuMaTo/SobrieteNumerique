@@ -2,10 +2,11 @@
 
 namespace App\Security;
 
-use Symfony\Component\Security\Http\Authentication\TokenExtractor\TokenExtractorInterface;
+
+use Symfony\Component\Security\Http\AccessToken\AccessTokenExtractorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class TokenExtractor implements TokenExtractorInterface
+class TokenExtractor implements AccessTokenExtractorInterface
 {
     private string $headerName;
 
@@ -14,10 +15,9 @@ class TokenExtractor implements TokenExtractorInterface
         $this->headerName = $headerName;
     }
 
-    public function extract(Request $request): ?string
+    public function extractAccessToken(Request $request): ?string
     {
         $token = null;
-
         // Extract token from a custom header
         if ($request->headers->has($this->headerName)) {
             $authorizationHeader = $request->headers->get($this->headerName);
@@ -27,7 +27,6 @@ class TokenExtractor implements TokenExtractorInterface
                 $token = substr($authorizationHeader, 7);
             }
         }
-
         // Alternatively, extract token from a query parameter (if needed)
         if ($request->query->has('token')) {
             $token = $request->query->get('token');
