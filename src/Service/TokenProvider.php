@@ -29,7 +29,6 @@ class TokenProvider
 
         $this->entityManager->persist($token);
         $this->entityManager->flush();
-
         return $token;
     }
 
@@ -41,7 +40,6 @@ class TokenProvider
         if ($tokenEntity && $tokenEntity->getExpiresAt() > new \DateTime()) {
             return $tokenEntity->getUser();
         }
-
         return null;
     }
 
