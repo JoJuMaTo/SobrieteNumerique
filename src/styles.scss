@@ -1,1 +1,44 @@
+@import '@angular/material/prebuilt-themes/purple-green.css';
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mainBlock {
+  padding: 16px;
+  background-color: #f3f3f3; // Une couleur de fond légère par exemple
+}
+
+.greetings {
+  h1 {
+    color: #4caf50; // Couleur de texte verte
+    &.greetings-mobile {
+      color: #9c27b0; // Couleur de texte violette pour mobile
+    }
+  }
+}
+
+.buttonContainer {
+  display: flex;
+  gap: 16px;
+
+  .linkButton {
+    &.ButtonOne {
+      background-color: #4caf50; // Couleur verte pour Bouton 1
+      color: white;
+
+      &:hover {
+        background-color: darken(#4caf50, 10%);
+      }
+    }
+
+    &.ButtonTwo {
+      background-color: #4caf50; // Couleur verte pour Bouton 1
+      color: white;
+
+      &:hover {
+        background-color: darken(#4caf50, 10%);
+      }
+    }
+  }
+}

@@ -20,7 +20,6 @@ export class UserService {
 
   saveNewUser(userForm : FormGroup): Observable<any> {
 
-    //TODO : définir URL de l'API côté serveur
 
     return this.http.post<string>(`${this.registerUrl}`,JSON.stringify(userForm), {responseType: 'text' as 'json'});
   }

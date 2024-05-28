@@ -1,0 +1,24 @@
+@import '@angular/material/prebuilt-themes/purple-green.css';
+
+/* questionnaire.component.scss */
+div {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+div > div {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 10px 0;
+}

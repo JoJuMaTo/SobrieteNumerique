@@ -14,7 +14,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(
       // registering interceptors
       withInterceptors([authInterceptor])),
-    importProvidersFrom(BrowserAnimationsModule), provideAnimationsAsync(),
+    importProvidersFrom(BrowserAnimationsModule), provideAnimationsAsync(), provideAnimationsAsync(), provideAnimationsAsync(),
 
   ]
 }).catch((err: any) => console.error(err));

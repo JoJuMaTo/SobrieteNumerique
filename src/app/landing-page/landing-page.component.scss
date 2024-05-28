@@ -1,27 +1,35 @@
-.greetings {
-  display: flex;
-  flex-direction: column; }
+@import '@angular/material/prebuilt-themes/purple-green.css';
 
-.greetings-mobile{
-  font-size: 2em;
+// Classes personnalisées
+.mainBlock {
+  padding: 16px;
+  background-color: #f3f3f3; // Couleur de fond légère
 }
 
-h1 {
-  background-color: transparent;
-  font-size: 5em;
-  margin-top: 150px;
-  color: darkred;
-  text-align: center; }
+.greetings {
+  display: flex;
+  flex-direction: column;
+  h1 {
+    background-color: transparent;
+    font-size: 5em;
+    margin-top: 150px;
+    color: darkred;
+    text-align: center;
 
+    &.greetings-mobile {
+      font-size: 2em;
+      color: #9c27b0; // Couleur violette pour mobile
+    }
+  }
+}
 
 .buttonContainer {
   display: flex;
-  justify-content: center; }
+  justify-content: center;
+}
 
-.ButtonOne {
-  margin-right: 10px; }
+h1{
+  margin-bottom: 150px;
+}
 
-.ButtonTwo {
-  margin-left: 10px; }
 
-/*# sourceMappingURL=landing-page.component.css.map */

@@ -1,10 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ResponsiveService} from "../core/services/responsive.service";
+import {MatButton, MatButtonModule} from '@angular/material/button';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
-  imports: [],
+  imports: [
+    MatButton,
+    NgIf
+  ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.scss'
 })
