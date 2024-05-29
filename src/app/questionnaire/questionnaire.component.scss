@@ -1,24 +1,16 @@
 @import '@angular/material/prebuilt-themes/purple-green.css';
 
-/* questionnaire.component.scss */
-div {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+
+.question-container {
+  padding: 20px;
 }
 
-div > div {
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
+.navigation-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  margin: 10px 0;
+.navigation-buttons button {
+  padding: 10px 20px;
 }

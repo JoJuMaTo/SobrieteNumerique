@@ -1,10 +1,50 @@
-<div class="pink">
+<div class="question-wrapper" [@slideInOut]>
   <h2>{{ question.strQuestion }}</h2>
   <ul>
-    <li>{{ question.strAnswer1 }}</li>
-    <li>{{ question.strAnswer2 }}</li>
-    <li *ngIf="question.strAnswer3">{{ question.strAnswer3 }}</li>
-    <li *ngIf="question.strAnswer4">{{ question.strAnswer4 }}</li>
-    <li *ngIf="question.strAnswer5">{{ question.strAnswer5 }}</li>
+    <li>
+      <label>
+        <input type="radio" name="answer{{ question.id }}"
+               [value]="question.strAnswer1"
+               (change)="selectAnswer(question.strAnswer1)"
+               [checked]="selectedAnswer === question.strAnswer1">
+        {{ question.strAnswer1 }}
+      </label>
+    </li>
+    <li>
+      <label>
+        <input type="radio" name="answer{{ question.id }}"
+               [value]="question.strAnswer2"
+               (change)="selectAnswer(question.strAnswer2)"
+               [checked]="selectedAnswer === question.strAnswer2">
+        {{ question.strAnswer2 }}
+      </label>
+    </li>
+    <li *ngIf="question.strAnswer3">
+      <label>
+        <input type="radio" name="answer{{ question.id }}"
+               [value]="question.strAnswer3"
+               (change)="selectAnswer(question.strAnswer3)"
+               [checked]="selectedAnswer === question.strAnswer3">
+        {{ question.strAnswer3 }}
+      </label>
+    </li>
+    <li *ngIf="question.strAnswer4">
+      <label>
+        <input type="radio" name="answer{{ question.id }}"
+               [value]="question.strAnswer4"
+               (change)="selectAnswer(question.strAnswer4)"
+               [checked]="selectedAnswer === question.strAnswer4">
+        {{ question.strAnswer4 }}
+      </label>
+    </li>
+    <li *ngIf="question.strAnswer5">
+      <label>
+        <input type="radio" name="answer{{ question.id }}"
+               [value]="question.strAnswer5"
+               (change)="selectAnswer(question.strAnswer5)"
+               [checked]="selectedAnswer === question.strAnswer5">
+        {{ question.strAnswer5 }}
+      </label>
+    </li>
   </ul>
 </div>
