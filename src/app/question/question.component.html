@@ -1,12 +1,10 @@
-
-<p>{{question.toString()}}</p>
-<div *ngIf="question">
-<h2>{{ question.strQuestion }}</h2>
-<ul>
-  <li>{{ question.strAnswer1 }}</li>
-  <li>{{ question.strAnswer2 }}</li>
-  <li *ngIf="question.strAnswer3">{{ question.strAnswer3 }}</li>
-  <li *ngIf="question.strAnswer4">{{ question.strAnswer4 }}</li>
-  <li *ngIf="question.strAnswer5">{{ question.strAnswer5 }}</li>
-</ul>
+<div class="pink">
+  <h2>{{ question.strQuestion }}</h2>
+  <ul>
+    <li>{{ question.strAnswer1 }}</li>
+    <li>{{ question.strAnswer2 }}</li>
+    <li *ngIf="question.strAnswer3">{{ question.strAnswer3 }}</li>
+    <li *ngIf="question.strAnswer4">{{ question.strAnswer4 }}</li>
+    <li *ngIf="question.strAnswer5">{{ question.strAnswer5 }}</li>
+  </ul>
 </div>

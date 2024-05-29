@@ -1,8 +1,6 @@
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading">
-  <div><p>TEST</p><p>{{questions[0]}}</p></div>
-  <div *ngFor="let question of questions" >
+  <ng-container *ngFor="let question of questions$ | async">
     <app-question [question]="question"></app-question>
-  </div>
+  </ng-container>
 </div>
-

@@ -10,6 +10,8 @@
       "sourceRoot": "src",
       "prefix": "app",
       "architect": {
+
+
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
@@ -39,6 +41,15 @@
                 }
               ]
             },
+            "spring": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.spring.ts"
+                }
+
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -46,6 +57,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+
+
 
               "budgets": [
                 {
@@ -82,7 +95,7 @@
               "buildTarget": "sobrieteNumerique:build:local"
             },
             "spring": {
-              "buildTarget": "sobrieteNumerique:build:local"
+              "buildTarget": "sobrieteNumerique:build:spring"
             }
           },
 

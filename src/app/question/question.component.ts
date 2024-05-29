@@ -9,11 +9,11 @@ import {NgIf} from "@angular/common";
     NgIf
   ],
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.css']
+  styleUrls: ['./question.component.scss']
 })
 export class QuestionComponent implements OnInit {
 
-  @Input() question!: Question;
+  @Input() question: Question;
 
   constructor() {
     console.log('QuestionComponent constructor called');

@@ -1,10 +1,9 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { of } from 'rxjs';
-import { catchError, finalize, map } from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
 import { Question } from '../core/models/question';
 import { QuestionService } from '../core/services/question.service';
-import {CommonModule, NgFor, NgIf} from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { QuestionComponent } from '../question/question.component';
 
 @Component({
@@ -24,26 +23,28 @@ import { QuestionComponent } from '../question/question.component';
 export class QuestionnaireComponent implements OnInit {
 
   isLoading: boolean = true;
-  questions: Question[] = [];
-
-  constructor(private questionService: QuestionService,  private cdr: ChangeDetectorRef) {
+  questions$ = new BehaviorSubject<Question[]>([]);
+  questions!: Observable<Question[]> ;
+  constructor(private questionService: QuestionService, private cdr: ChangeDetectorRef) {
     console.log('QuestionnaireComponent constructor called');
   }
 
   ngOnInit() {
-    this.questionService.getQuestions().pipe(
-      map(data => {
-        this.questions = data;
-        this.cdr.markForCheck();
-      }),
-      finalize(() => {
+    this.loadQuestions();
+  }
+
+  loadQuestions() {
+    this.questionService.getQuestions().subscribe({
+      next: (questions) => {
+        this.questions$.next([...questions]);
+        console.log('Questions received:', questions);
         this.isLoading = false;
-        this.cdr.markForCheck();
-      }),
-      catchError(error => {
-        console.error('Error fetching questions:', error);
-        return of([]);
-      })
-    ).subscribe();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Error loading questions', error);
+        this.isLoading = false;
+      }
+    });
   }
 }
