@@ -1,21 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { Component, Input, OnInit } from '@angular/core';
+import { Question } from '../core/models/question';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-question',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf
+  ],
   templateUrl: './question.component.html',
-  styleUrl: './question.component.css'
+  styleUrls: ['./question.component.css']
 })
+export class QuestionComponent implements OnInit {
 
-export class QuestionComponent implements OnInit{
+  @Input() question!: Question;
 
-constructor(private http: HttpClient) {}
+  constructor() {
+    console.log('QuestionComponent constructor called');
 
+  }
 
+  ngOnInit() {
+    console.log('QuestionComponent ngOnInit called');
+    console.log('Question:', this.question);
+  }
 
-ngOnInit() {
-}
-
+  protected readonly Question = Question;
 }

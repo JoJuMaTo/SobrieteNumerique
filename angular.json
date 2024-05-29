@@ -80,6 +80,9 @@
             },
             "local": {
               "buildTarget": "sobrieteNumerique:build:local"
+            },
+            "spring": {
+              "buildTarget": "sobrieteNumerique:build:local"
             }
           },
 

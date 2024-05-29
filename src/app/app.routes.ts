@@ -9,6 +9,6 @@ export const routes: Routes = [
   {path: 'login', component: LoginComponent, },
   {path: 'questionnaire', component: QuestionnaireComponent},
   {path: 'user/create', component: NewUserComponent},
-  {path: 'user/updatepassword', component: UpdateUserComponent}
+  {path: 'user/updatepassword', component: UpdateUserComponent},
 
 ];

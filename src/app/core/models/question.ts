@@ -1,22 +1,16 @@
 export class Question {
-
-
-
-  id!: number;
-  strQuestion!: string;
-  strAnswer1!: string
-  strAnswer2!: string
-  strAnswer3!: string
-  strAnswer4!: string
-  strAnswer5!: string
-  weight1 !: string
-  weight2 !: string
-  weight3 !: string
-  weight4 !: string
-  weight5 !: string
-  categoryId!: number;
-  quizId !: string;
-
-
-
+  id: number;
+  strQuestion: string;
+  strAnswer1: string;
+  strAnswer2: string;
+  strAnswer3: string;
+  strAnswer4: string;
+  strAnswer5: string;
+  weight1: string = "0";
+  weight2: string = "0";
+  weight3: string = "0";
+  weight4: string = "0";
+  weight5: string = "0";
+  categoryId: number = 0;
+  quizId: string = "1";
 }

@@ -1,57 +1,8 @@
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading">
-  <div *ngFor="let question of questions; let i = index">
-    <div *ngIf="i === currentQuestionIndex" [@slideInOut]>
-      <h2>{{ question.strQuestion }}</h2>
-      <ul>
-        <li>
-          <label>
-            <input type="radio" name="answer{{ question.id }}"
-                   [value]="question.strAnswer1"
-                   (change)="selectAnswer(question.id, question.strAnswer1)"
-                   [checked]="isAnswerSelected(question.id, question.strAnswer1)">
-            {{ question.strAnswer1 }}
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="radio" name="answer{{ question.id }}"
-                   [value]="question.strAnswer2"
-                   (change)="selectAnswer(question.id, question.strAnswer2)"
-                   [checked]="isAnswerSelected(question.id, question.strAnswer2)">
-            {{ question.strAnswer2 }}
-          </label>
-        </li>
-        <li *ngIf="question.strAnswer3">
-          <label>
-            <input type="radio" name="answer{{ question.id }}"
-                   [value]="question.strAnswer3"
-                   (change)="selectAnswer(question.id, question.strAnswer3)"
-                   [checked]="isAnswerSelected(question.id, question.strAnswer3)">
-            {{ question.strAnswer3 }}
-          </label>
-        </li>
-        <li *ngIf="question.strAnswer4">
-          <label>
-            <input type="radio" name="answer{{ question.id }}"
-                   [value]="question.strAnswer4"
-                   (change)="selectAnswer(question.id, question.strAnswer4)"
-                   [checked]="isAnswerSelected(question.id, question.strAnswer4)">
-            {{ question.strAnswer4 }}
-          </label>
-        </li>
-        <li *ngIf="question.strAnswer5">
-          <label>
-            <input type="radio" name="answer{{ question.id }}"
-                   [value]="question.strAnswer5"
-                   (change)="selectAnswer(question.id, question.strAnswer5)"
-                   [checked]="isAnswerSelected(question.id, question.strAnswer5)">
-            {{ question.strAnswer5 }}
-          </label>
-        </li>
-      </ul>
-      <button (click)="previousQuestion()" [disabled]="currentQuestionIndex === 0">Previous</button>
-      <button (click)="nextQuestion()" [disabled]="currentQuestionIndex === questions.length - 1 || !selectedAnswers[questions[currentQuestionIndex].id]">Next</button>
-    </div>
+  <div><p>TEST</p><p>{{questions[0]}}</p></div>
+  <div *ngFor="let question of questions" >
+    <app-question [question]="question"></app-question>
   </div>
 </div>
+
