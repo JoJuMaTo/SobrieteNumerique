@@ -190,12 +190,12 @@ class QuestionsReponses
 
         return $this;
     }
-    public function getQuizId(): ?string
+    public function getQuizId(): ?int
     {
         return $this->quizId;
     }
 
-    public function setQuizId(string $quizId): static
+    public function setQuizId(int $quizId): static
     {
         $this->quizId = $quizId;
 

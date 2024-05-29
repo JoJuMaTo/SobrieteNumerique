@@ -72,7 +72,7 @@ class QuizController extends AbstractController
             return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
         $quizRepo = $entityManager->getRepository(Quiz::class);
-        if($quizRepo->isThereAQuiz()){
+        if($quizRepo->isThereAQuiz($id)){
             $question = $this->newQuestion($data['strQuestion'], $data['strAnswer1'], $data['strAnswer2'], $data['strAnswer3'], $data['strAnswer4'], $data['strAnswer5'], $data['weight1'], $data['weight2'], $data['weight3'], $data['weight4'], $data['weight5'], $data['categorieId'], $id);
             $entityManager->persist($question);
             $entityManager->flush();
@@ -80,11 +80,11 @@ class QuizController extends AbstractController
                 200);
         }
         $quiz = $this->newQuiz("","");
-        $question = $this->newQuestion($data['strQuestion'], $data['strAnswer1'], $data['strAnswer2'], $data['strAnswer3'], $data['strAnswer4'], $data['strAnswer5'], $data['weight1'], $data['weight2'], $data['weight3'], $data['weight4'], $data['weight5'], $data['categorieId'], 1);
+        $question = $this->newQuestion($data['strQuestion'], $data['strAnswer1'], $data['strAnswer2'], $data['strAnswer3'], $data['strAnswer4'], $data['strAnswer5'], $data['weight1'], $data['weight2'], $data['weight3'], $data['weight4'], $data['weight5'], $data['categorieId'], $quiz->getId());
         $entityManager->persist($question);
         $entityManager->persist($quiz);
         $entityManager->flush();
-        return new Response('New Quiz '.$id.' and Question add',
+        return new Response('New Quiz '.$quiz->getId() .' and Question add',
             200);
 
 
@@ -111,5 +111,36 @@ class QuizController extends AbstractController
         $entityManager->flush();
 
         return new Response('Quiz created with success !', Response::HTTP_OK);
+    }
+
+    #[Route('/quiz/{id}/response', name: 'api_quiz_response', methods: ['POST'])]
+    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): Response
+    {
+        $token = $tokenExtractor->extractAccessToken($request);
+        $user = $tokenProvider->validateToken($token);
+        if($user === null){
+
+            return new Response('Invalid token', Response::HTTP_BAD_REQUEST);
+        }
+        $userId = $user->getId();
+
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+        $questionId = $data['questionId'];
+        $choice = $data['choice'];
+        $weight = $data['weight'];
+        $response = new QuizResponse();
+        $response->setQuestionId($questionId);
+        $response->setChoice($choice);
+        $response->setUserId($userId);
+        $response->setQuizId($id);
+        $response->setWeight($weight);
+
+        $entityManager->persist($response);
+        $entityManager->flush();
+        return new Response('QuizResponse recorded', 200);
     }
 }
