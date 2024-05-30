@@ -8,10 +8,17 @@
     </app-question>
   </div>
   <div class="navigation-buttons">
-    <button (click)="previousQuestion()" [disabled]="questions.indexOf(currentQuestion) === 0">Previous</button>
+
+      <button (click)="previousQuestion()" [disabled]="questions.indexOf(currentQuestion) === 0">Précédent</button>
+
+    @if (currentQuestionIndex <= questions.length -1 && !selectedAnswers[currentQuestion.id]){
     <button (click)="nextQuestion()"
             [disabled]="questions.indexOf(currentQuestion) >= questions.length - 1 || !selectedAnswers[currentQuestion.id]">
       Next
-    </button>
+    </button> }
+    @if (currentQuestionIndex === questions.length -1 && selectedAnswers[currentQuestion.id]){
+      <button class="validateButton" (click)="validateAnswers()">VALIDER</button>
+    }
   </div>
+
 </div>

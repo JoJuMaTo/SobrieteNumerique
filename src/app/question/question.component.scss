@@ -1,11 +1,22 @@
 @import '@angular/material/prebuilt-themes/purple-green.css';
 
-
 .question-wrapper {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+
+  &.mobile {
+    padding: 10px;
+    h2 {
+      font-size: 1.2rem;
+    }
+    ul {
+      li {
+        font-size: 0.9rem;
+      }
+    }
+  }
 }
 
 .question-wrapper h2 {

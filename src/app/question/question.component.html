@@ -1,6 +1,4 @@
-
-
-<div class="question-wrapper" [@slideInOut]>
+<div class="question-wrapper" [class.mobile]="isMobile" [@slideInOut]>
   <h2>{{ question.strQuestion }}</h2>
   <ul>
     <li>

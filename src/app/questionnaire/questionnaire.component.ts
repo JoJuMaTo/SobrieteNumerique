@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
 import { Question } from '../core/models/question';
 import { QuestionService } from '../core/services/question.service';
 import { QuestionnaireStateService } from '../core/services/questionnaire-state.service';
@@ -123,6 +122,10 @@ export class QuestionnaireComponent implements OnInit {
 
   isAnswerSelected(questionId: number, answer: string): boolean {
     return this.selectedAnswers[questionId] === answer;
+  }
+
+  validateAnswers(): void {
+    this.questionnaireStateService.sendSelectedAnswers();
   }
 
   triggerAnimation() {

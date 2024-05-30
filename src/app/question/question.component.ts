@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Question } from '../core/models/question';
 import { NgIf } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import {ResponsiveService} from "../core/services/responsive.service";
 
 @Component({
   selector: 'app-question',
@@ -29,17 +30,25 @@ export class QuestionComponent implements OnInit {
   @Input() question!: Question;
   @Input() selectedAnswer!: string;
   @Output() answerSelected = new EventEmitter<{ questionId: number, answer: string }>();
+  isMobile!: boolean;
 
-  constructor() {
+  constructor(private responsiveService: ResponsiveService) {
     console.log('QuestionComponent constructor called');
   }
 
   ngOnInit() {
     console.log('QuestionComponent ngOnInit called');
     console.log('Question received in child component:', this.question);
+
+    this.responsiveService.isMobile$.subscribe(isMobile => {
+      this.isMobile = isMobile;
+    });
+
   }
 
   selectAnswer(answer: string) {
     this.answerSelected.emit({ questionId: this.question.id, answer });
   }
+
+
 }
