@@ -11,11 +11,12 @@
 
       <button (click)="previousQuestion()" [disabled]="questions.indexOf(currentQuestion) === 0">Précédent</button>
 
-    @if (currentQuestionIndex <= questions.length -1 && !selectedAnswers[currentQuestion.id]){
+    @if (currentQuestionIndex != questions.length -1){
     <button (click)="nextQuestion()"
             [disabled]="questions.indexOf(currentQuestion) >= questions.length - 1 || !selectedAnswers[currentQuestion.id]">
       Next
-    </button> }
+    </button>
+    }
     @if (currentQuestionIndex === questions.length -1 && selectedAnswers[currentQuestion.id]){
       <button class="validateButton" (click)="validateAnswers()">VALIDER</button>
     }
