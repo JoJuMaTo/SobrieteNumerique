@@ -94,10 +94,7 @@ class AuthController extends AbstractController
         return new JsonResponse (['message' => 'Ca passe !'], Response::HTTP_OK);
     }
 
-    /**
-     * @throws OptimisticLockException
-     * @throws ORMException|\JsonException
-     */
+
     #[Route('/user/update', name: 'api_auth_update', methods: ['PUT'])]
     public function updateUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider, TokenExtractor $tokenExtractor): JsonResponse
     {

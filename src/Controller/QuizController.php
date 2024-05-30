@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\QuestionsReponses;
 use App\Entity\Quiz;
 use App\Entity\Score;
+use App\Entity\UserResponse;
+use App\Repository\QuestionsReponsesRepository;
 use App\Repository\QuizRepository;
 use App\Security\TokenExtractor;
 use App\Service\TokenProvider;
@@ -115,7 +117,7 @@ class QuizController extends AbstractController
     }
 
     #[Route('/quiz/{id}/response', name: 'api_quiz_response', methods: ['POST'])]
-    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): Response
+    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $id): Response
     {
         $token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
@@ -130,25 +132,35 @@ class QuizController extends AbstractController
         } catch (JsonException $e) {
             return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $questionId = $data['questionId'];
-        $choice = $data['choice'];
-        $weight = $data['weight'];
-        $response = new QuizResponse();
-        $response->setQuestionId($questionId);
-        $response->setChoice($choice);
-        $response->setUserId($userId);
-        $response->setQuizId($id);
-        $response->setWeight($weight);
+        foreach ($data as $question) {
+            $questionId = $question['questionId'];
+            $choice = $question['choice'];
+            $weight = $repoQR->findOneWeightByAnswerId($questionId, $id, $choice);
+            $response = new UserResponse();
+            $response->setQuestionId($questionId);
+            $response->setChoice($choice);
+            $response->setUserId($userId);
+            $response->setQuizId($id);
+            $response->setWeight($weight);
 
-        $entityManager->persist($response);
-        $entityManager->flush();
-        return new Response('QuizResponse recorded', 200);
+            $entityManager->persist($response);
+            $entityManager->flush();
+        }
+        return new Response('QuizResponses recorded', 200);
     }
-    #[Route('/quiz/{id}/score', name: 'api_quiz_response', methods: ['POST'])]
+    #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
     public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
         $score = new Score();
-
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return new JsonResponse('error: JsonException - ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+        $quizId = $data["quizId"];
+        $token = $tokenExtractor->extractAccessToken($request);
+        $userId = $tokenProvider->validateToken($token);
+        $score = $score->makeScore($userId, $quizId);
         return $this->json(["score" => $score]);
     }
 }

@@ -75,4 +75,12 @@ class Score
 
         return $this;
     }
+    private function apiCall(): float{
+
+    }
+    public function makeScore(): ?self
+    {
+
+        return $this;
+    }
 }
