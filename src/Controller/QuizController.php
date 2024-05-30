@@ -132,12 +132,13 @@ class QuizController extends AbstractController
         } catch (JsonException $e) {
             return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
+        $i =0;
         foreach ($data as $question) {
-            $questionId = $question['questionId'];
-            $choice = $question['choice'];
-            $weight = $repoQR->findOneWeightByAnswerId($questionId, $id, $choice);
+            $i++;
+            $choice = $question[$i];
+            $weight = $repoQR->findOneWeightByAnswerId($i, $id, $choice);
             $response = new UserResponse();
-            $response->setQuestionId($questionId);
+            $response->setQuestionId($i);
             $response->setChoice($choice);
             $response->setUserId($userId);
             $response->setQuizId($id);
@@ -148,19 +149,26 @@ class QuizController extends AbstractController
         }
         return new Response('QuizResponses recorded', 200);
     }
+
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
     public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
-        $score = new Score();
+        $token = $tokenExtractor->extractAccessToken($request);
+        $user = $tokenProvider->validateToken($token);
+        if($user === null){
+
+            return new JsonResponse(['error'=> 'Invalid token'], Response::HTTP_BAD_REQUEST);
+        }
+        $userId = $user->getId();
+        //$score = new Score();
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             return new JsonResponse('error: JsonException - ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $quizId = $data["quizId"];
-        $token = $tokenExtractor->extractAccessToken($request);
-        $userId = $tokenProvider->validateToken($token);
-        $score = $score->makeScore($userId, $quizId);
+
+
+        $score = $this->makeScore($userId, $id);
         return $this->json(["score" => $score]);
     }
 }
