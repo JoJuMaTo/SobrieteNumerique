@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ResponsiveService} from "../core/services/responsive.service";
-import {MatButton, MatButtonModule} from '@angular/material/button';
+import {MatButton} from '@angular/material/button';
 import {NgIf} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-landing-page',
@@ -17,7 +18,7 @@ export class LandingPageComponent implements OnInit {
 
   isMobile!: boolean;
 
-  constructor(private responsiveService: ResponsiveService) {}
+  constructor(private responsiveService: ResponsiveService, private router: Router) {}
 
   ngOnInit() {
     this.responsiveService.isMobile$.subscribe(isMobile => {
@@ -28,5 +29,9 @@ export class LandingPageComponent implements OnInit {
         console.log("Mode desktop détecté");
       }
     });
+  }
+
+  onGoToQuiz(){
+    this.router.navigateByUrl('questionnaire')
   }
 }

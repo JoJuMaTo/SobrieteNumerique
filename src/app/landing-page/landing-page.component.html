@@ -4,7 +4,7 @@
     <h1 *ngIf="!isMobile">Welcome</h1>
   </div>
   <div class="buttonContainer">
-    <button mat-raised-button class="linkButton ButtonOne">Bouton 1</button>
+    <button (click)="onGoToQuiz()" mat-raised-button class="linkButton ButtonOne">Questionnaire</button>
     <button mat-raised-button class="linkButton ButtonTwo">Bouton 2</button>
   </div>
 </div>
