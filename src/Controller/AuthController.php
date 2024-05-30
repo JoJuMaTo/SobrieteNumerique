@@ -28,6 +28,7 @@ class AuthController extends AbstractController
         } catch (JsonException $e) {
             return new JsonResponse(['error' => 'Invalid JSON: ' . $e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
+
         $username = $data['username'];
         $password = $data['password'];
         //$username = $request->request->get('username');
@@ -47,7 +48,7 @@ class AuthController extends AbstractController
     }
 
     /**
-     * @throws RandomException|\JsonException
+     * @throws RandomException
      */
     #[Route('/user/login', name: 'api_auth_login_user', methods: ['POST'])]
     public function userLogin(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, TokenProvider $tokenProvider): Response

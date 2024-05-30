@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\QuestionsReponses;
 use App\Entity\Quiz;
+use App\Entity\Score;
 use App\Repository\QuizRepository;
 use App\Security\TokenExtractor;
 use App\Service\TokenProvider;
@@ -142,5 +143,12 @@ class QuizController extends AbstractController
         $entityManager->persist($response);
         $entityManager->flush();
         return new Response('QuizResponse recorded', 200);
+    }
+    #[Route('/quiz/{id}/score', name: 'api_quiz_response', methods: ['POST'])]
+    public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
+    {
+        $score = new Score();
+
+        return $this->json(["score" => $score]);
     }
 }
