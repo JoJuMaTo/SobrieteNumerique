@@ -42,7 +42,7 @@ class QuestionsReponses
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $weight5 = null;
     #[ORM\Column]
-    private ?array $categoryId = [];
+    private ?int $categoryId = null;
 
     #[ORM\Column]
     private ?int $quizId = null;
@@ -179,12 +179,12 @@ class QuestionsReponses
         return $this->weight5;
     }
 
-    public function getCategoryId(): ?array
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
-    public function setCategoryId(array $categoryId): static
+    public function setCategoryId(int $categoryId): static
     {
         $this->categoryId = $categoryId;
 

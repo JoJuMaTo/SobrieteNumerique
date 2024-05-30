@@ -23,7 +23,7 @@ class UserResponse
     private ?int $questionId = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $choice = null;
+    private ?int $choice = null;
 
     #[ORM\Column(length: 255)]
     private ?string $weight = null;
@@ -69,12 +69,12 @@ class UserResponse
         return $this;
     }
 
-    public function getChoice(): ?string
+    public function getChoice(): ?int
     {
         return $this->choice;
     }
 
-    public function setChoice(string $choice): static
+    public function setChoice(int $choice): static
     {
         $this->choice = $choice;
 

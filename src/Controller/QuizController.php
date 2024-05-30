@@ -77,6 +77,10 @@ class QuizController extends AbstractController
         $quizRepo = $entityManager->getRepository(Quiz::class);
         if($quizRepo->isThereAQuiz($id)){
             $question = $this->newQuestion($data['strQuestion'], $data['strAnswer1'], $data['strAnswer2'], $data['strAnswer3'], $data['strAnswer4'], $data['strAnswer5'], $data['weight1'], $data['weight2'], $data['weight3'], $data['weight4'], $data['weight5'], $data['categorieId'], $id);
+            $quiz = $quizRepo->find($id);
+            $qIds = $quiz->getQuestionsIds();
+            $qIds[] = $question->getId();
+            $quiz->setQuestionsIds($qIds);
             $entityManager->persist($question);
             $entityManager->flush();
             return new Response('Question added',
@@ -99,6 +103,7 @@ class QuizController extends AbstractController
         $description = $description === "" ? "undefined": $description;
         $quiz->setDescription($description);
         $quiz->setDateCreation(new DateTime('now'));
+        $quiz->setQuestionsIds([]);
         return $quiz;
     }
     #[Route('/quiz/add', name: 'api_quiz_add_quiz', methods: ['POST'])]
@@ -116,8 +121,8 @@ class QuizController extends AbstractController
         return new Response('Quiz created with success !', Response::HTTP_OK);
     }
 
-    #[Route('/quiz/{id}/response', name: 'api_quiz_response', methods: ['POST'])]
-    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $id): Response
+    #[Route('/quiz/{quizId}/response', name: 'api_quiz_response', methods: ['POST'])]
+    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $quizId, QuizRepository $repoQuiz): Response
     {
         $token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
@@ -132,21 +137,24 @@ class QuizController extends AbstractController
         } catch (JsonException $e) {
             return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $i =0;
-        foreach ($data as $question) {
-            $i++;
-            $choice = $question[$i];
-            $weight = $repoQR->findOneWeightByAnswerId($i, $id, $choice);
+
+
+        $quiz = $repoQuiz->isThereAQuiz($quizId);
+        $questionIds = $quiz->getQuestionsIds();
+        foreach($questionIds as $questionId) {
+            $respId = $repoQR->findResponseIdByResponseString($data[$questionId], $questionId, $quizId);
+            $weight = $repoQR->findOneWeightByAnswerId($questionId, $quizId, $respId);
             $response = new UserResponse();
-            $response->setQuestionId($i);
-            $response->setChoice($choice);
+            $response->setQuestionId($questionId);
+            $response->setChoice($respId);
             $response->setUserId($userId);
-            $response->setQuizId($id);
+            $response->setQuizId($quizId);
             $response->setWeight($weight);
 
             $entityManager->persist($response);
             $entityManager->flush();
         }
+
         return new Response('QuizResponses recorded', 200);
     }
 

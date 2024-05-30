@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Quiz;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\LockMode;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,15 +16,16 @@ class QuizRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Quiz::class);
     }
-    public function isThereAQuiz(): Quiz
+    public function isThereAQuiz(int $i): Quiz
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.id = :id')
-            ->setParameter('id', 1)
+            ->setParameter('id', $i)
             ->getQuery()
             ->getOneOrNullResult();
 
     }
+
 
     //    /**
     //     * @return Quiz[] Returns an array of Quiz objects

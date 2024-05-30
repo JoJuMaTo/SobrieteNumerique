@@ -23,6 +23,9 @@ class Quiz
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $questionsIds = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +63,18 @@ class Quiz
     public function setDateCreation(\DateTimeInterface $dateCreation): static
     {
         $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function getQuestionsIds(): ?array
+    {
+        return $this->questionsIds;
+    }
+
+    public function setQuestionsIds(?array $questionsIds): static
+    {
+        $this->questionsIds = $questionsIds;
 
         return $this;
     }

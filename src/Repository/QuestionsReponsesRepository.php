@@ -74,9 +74,45 @@ class QuestionsReponsesRepository extends ServiceEntityRepository
             if($answer === $result->getStrAnswer5()){
                 return $result->getWeight5();
             }
-            return "";
+
         }
+        return "";
 
+    }
+    public function findResponseStringByResponseId(int $id, int $questionId, int $quizId): string{
 
+            $results = $this->createQueryBuilder('q')
+            ->where('q.id = :questionId')
+            ->andWhere('q.quizId = :quizId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('quizId', $quizId)
+            ->getQuery()
+            ->getResult();
+        return match ($id) {
+            1 => $results->getStrAnswer1(),
+            2 => $results->getStrAnswer2(),
+            3 => $results->getStrAnswer3(),
+            4 => $results->getStrAnswer4(),
+            5 => $results->getStrAnswer5(),
+            default => "",
+        };
+    }
+    public function findResponseIdByResponseString(string $response, int $questionId, int $quizId): int{
+
+            $results = $this->createQueryBuilder('q')
+            ->where('q.id = :questionId')
+            ->andWhere('q.quizId = :quizId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('quizId', $quizId)
+            ->getQuery()
+            ->getResult();
+            return match ($response) {
+                $results->getgetStrAnswer1 => 1,
+                $results->getgetStrAnswer2 => 2,
+                $results->getgetStrAnswer3 => 3,
+                $results->getgetStrAnswer4 => 4,
+                $results->getgetStrAnswer5 => 5,
+                default => 0
+            };
     }
 }
