@@ -58,6 +58,7 @@ export class QuestionnaireComponent implements OnInit {
 
   loadQuestions() {
     const savedQuestions = this.questionnaireStateService.getQuestions();
+    console.log(savedQuestions);
     const savedCurrentQuestionIndex = this.questionnaireStateService.getCurrentQuestionIndex();
     const savedSelectedAnswers = this.questionnaireStateService.getSelectedAnswers();
 
@@ -104,14 +105,12 @@ export class QuestionnaireComponent implements OnInit {
 
   previousQuestion() {
     if (this.currentQuestionIndex > 0) {
-      this.triggerAnimation();
-      setTimeout(() => {
         this.currentQuestionIndex--;
         this.currentQuestion = this.questions[this.currentQuestionIndex];
         this.questionKey = this.currentQuestion.id;
         this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
         this.cdr.detectChanges();
-      }, 300); // Match the duration of the animation
+        this.triggerAnimation();
     }
   }
 

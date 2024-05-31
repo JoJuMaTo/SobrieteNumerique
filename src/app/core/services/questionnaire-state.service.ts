@@ -45,12 +45,24 @@ export class QuestionnaireStateService {
     return this.selectedAnswersSubject.value;
   }
 
+  // sendSelectedAnswers(): void {
+  //   const answersToSendArray = Object.entries(this.selectedAnswersSubject.getValue()).map(([key, value]) => ({ [key]: value }));
+  //   console.log("\n*** DATA ENVOYEE A LA VALIDATION : ***\n" + JSON.stringify(answersToSendArray, null, 2));
+  //   this.http.post(`${environment.apiUrl}/quiz/9/response`, JSON.stringify(answersToSendArray, null, 2)).subscribe();
+  //
+  //
+  // }
+
   sendSelectedAnswers(): void {
-    const answersToSendArray = Object.entries(this.selectedAnswersSubject.getValue()).map(([key, value]) => ({ [key]: value }));
+    const answersToSendArray = Object.entries(this.selectedAnswersSubject.getValue()).map(([key, value]) => ({
+      question_id: key,
+      answer: value
+    }));
+
     console.log("\n*** DATA ENVOYEE A LA VALIDATION : ***\n" + JSON.stringify(answersToSendArray, null, 2));
-    this.http.post(`${environment.apiUrl}/quiz/1/response`, JSON.stringify(answersToSendArray, null, 2)).subscribe();
 
-
+    this.http.post(`${environment.apiUrl}/quiz/9/response`, JSON.stringify(answersToSendArray, null, 2)).subscribe();
   }
+
 
 }

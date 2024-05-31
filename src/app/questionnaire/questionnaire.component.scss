@@ -13,7 +13,14 @@
 
 .navigation-buttons button {
   padding: 10px 20px;
+
 }
+
 .validateButton{
   background: lightgreen;
+}
+
+button:hover{
+  scale: 1.2;
+  transition: 2s ease-out;
 }

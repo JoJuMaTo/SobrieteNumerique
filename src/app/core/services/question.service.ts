@@ -15,6 +15,6 @@ export class QuestionService {
 
   getQuestions(): Observable<Question[]> {
     console.log('getQuestions called');
-    return this.http.get<Question[]>(`${environment.apiUrl}/quiz/1`);
+    return this.http.get<Question[]>(`${environment.apiUrl}/quiz/9`);
   }
 }
