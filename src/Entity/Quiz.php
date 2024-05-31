@@ -23,8 +23,8 @@ class Quiz
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateCreation = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $questionsIds = null;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $questionsIds = [];
 
     public function getId(): ?int
     {

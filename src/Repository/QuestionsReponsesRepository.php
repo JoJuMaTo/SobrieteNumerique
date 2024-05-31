@@ -76,19 +76,19 @@ class QuestionsReponsesRepository extends ServiceEntityRepository
             }
 
         }
-        return "";
+        return "undefined";
 
     }
-    public function findResponseStringByResponseId(int $id, int $questionId, int $quizId): string{
+    public function findResponseStringByResponseId(int $responseId, int $id, int $quizId): string{
 
             $results = $this->createQueryBuilder('q')
             ->where('q.id = :questionId')
             ->andWhere('q.quizId = :quizId')
-            ->setParameter('questionId', $questionId)
+            ->setParameter('id', $id)
             ->setParameter('quizId', $quizId)
             ->getQuery()
-            ->getResult();
-        return match ($id) {
+            ->getOneOrNullResult();
+        return match ($responseId) {
             1 => $results->getStrAnswer1(),
             2 => $results->getStrAnswer2(),
             3 => $results->getStrAnswer3(),
@@ -97,21 +97,21 @@ class QuestionsReponsesRepository extends ServiceEntityRepository
             default => "",
         };
     }
-    public function findResponseIdByResponseString(string $response, int $questionId, int $quizId): int{
+    public function findResponseIdByResponseString(string $response, int $id, int $quizId): int{
 
             $results = $this->createQueryBuilder('q')
-            ->where('q.id = :questionId')
+            ->where('q.id = :id')
             ->andWhere('q.quizId = :quizId')
-            ->setParameter('questionId', $questionId)
+            ->setParameter('id', $id)
             ->setParameter('quizId', $quizId)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
             return match ($response) {
-                $results->getgetStrAnswer1 => 1,
-                $results->getgetStrAnswer2 => 2,
-                $results->getgetStrAnswer3 => 3,
-                $results->getgetStrAnswer4 => 4,
-                $results->getgetStrAnswer5 => 5,
+                $results->getStrAnswer1() => 1,
+                $results->getStrAnswer2() => 2,
+                $results->getStrAnswer3() => 3,
+                $results->getStrAnswer4() => 4,
+                $results->getStrAnswer5() => 5,
                 default => 0
             };
     }

@@ -88,10 +88,23 @@ class AuthController extends AbstractController
             ['Access-Control-Allow-Origin' => '*']);
     }
 
+    /**
+     * @throws \JsonException
+     */
     #[Route('/user/test/connection', name: 'api_auth_test_connection', methods: ['GET'])]
     public function testConnection(Request $request): JsonResponse
     {
-        return new JsonResponse (['message' => 'Ca passe !'], Response::HTTP_OK);
+        $js = json_encode(["22" => "La réponse", "23" => "La réponse B"], JSON_THROW_ON_ERROR);
+
+        try {
+            $j= json_decode($js, true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+        foreach ($j as $k => $v) {
+            print_r($v);
+        }
+        return new JsonResponse ($js, Response::HTTP_OK);
     }
 
 

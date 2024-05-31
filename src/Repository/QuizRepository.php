@@ -16,7 +16,7 @@ class QuizRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Quiz::class);
     }
-    public function isThereAQuiz(int $i): Quiz
+    public function isThereAQuiz(int $i): ?Quiz
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.id = :id')
