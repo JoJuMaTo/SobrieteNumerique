@@ -7,6 +7,7 @@ import {CommonModule, NgIf} from '@angular/common';
 import {QuestionComponent} from '../question/question.component';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Router} from "@angular/router";
+import {MatProgressBar, MatProgressBarModule} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-questionnaire',
@@ -15,7 +16,9 @@ import {Router} from "@angular/router";
     NgIf,
     CommonModule,
     HttpClientModule,
-    QuestionComponent
+    QuestionComponent,
+    MatProgressBar,
+    [MatProgressBarModule],
   ],
   templateUrl: './questionnaire.component.html',
   styleUrls: ['./questionnaire.component.scss'],

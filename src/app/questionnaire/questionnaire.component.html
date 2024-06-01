@@ -1,6 +1,12 @@
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading && currentQuestion" class="question-container">
+  <mat-progress-bar mode="determinate"
+                    value="{{currentQuestion.id/questions[questions.length-1].id*100}}">
+
+  </mat-progress-bar>
   <div *ngIf="questionKey" [@slideInOut]="animationState">
+
+
     <app-question
       (answerSelected)="selectAnswer($event)"
       [question]="currentQuestion"
@@ -17,7 +23,7 @@
         Next
       </button>
     }
-    @if (currentQuestionIndex === questions.length - 1 && selectedAnswers[currentQuestion.id]) {
+    @else if (currentQuestionIndex === questions.length - 1 && selectedAnswers[currentQuestion.id]) {
       <button class="validateButton" (click)="validateAnswers()">VALIDER</button>
     }
   </div>
