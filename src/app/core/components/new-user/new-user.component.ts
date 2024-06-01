@@ -2,8 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {UserService} from "../../services/user.service";
 import {User} from "../../models/user";
-import {tap} from "rxjs";
-import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-new-user',
@@ -14,14 +12,14 @@ import {HttpClient} from "@angular/common/http";
   templateUrl: './new-user.component.html',
   styleUrl: './new-user.component.css'
 })
-export class NewUserComponent implements OnInit{
+export class NewUserComponent implements OnInit {
 
 
   userForm!: FormGroup;
   @Input() user!: User;
 
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private http: HttpClient) {
+  constructor(private formBuilder: FormBuilder, private userService: UserService) {
   }
 
   ngOnInit() {
@@ -31,7 +29,7 @@ export class NewUserComponent implements OnInit{
     })
   }
 
-  onSubmitForm(): void{
+  onSubmitForm(): void {
 
 
     this.userService.saveNewUser(this.userForm.value).subscribe();

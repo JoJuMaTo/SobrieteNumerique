@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CustomModalComponent } from './custom-modal.component';
+import {CustomModalComponent} from './custom-modal.component';
 
 describe('CustomModalComponent', () => {
   let component: CustomModalComponent;
@@ -10,8 +10,8 @@ describe('CustomModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CustomModalComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CustomModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

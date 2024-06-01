@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import { AuthService, AuthRequest } from '../services/auth.service';
+import {AuthRequest, AuthService} from '../services/auth.service';
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgIf} from "@angular/common";
 
@@ -19,11 +19,9 @@ export class LoginComponent implements OnInit {
   message: string = '';
 
 
-
   constructor(protected authService: AuthService, private router: Router, private route: ActivatedRoute) {
     console.log('Constructor: credentials', this.credentials);
   }
-
 
 
   ngOnInit() {
@@ -44,13 +42,11 @@ export class LoginComponent implements OnInit {
   }
 
 
-
-
   login(): void {
     this.authService.login(this.credentials).subscribe({
       next: () => {
         this.router.navigate(['/']);
-        },
+      },
       error: error => {
         this.message = 'Échec de la connexion, vérifiez votre nom d’utilisateur/mot de passe';
         console.error('Login error', error);

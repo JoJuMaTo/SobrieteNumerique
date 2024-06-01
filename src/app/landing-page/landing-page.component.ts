@@ -18,7 +18,8 @@ export class LandingPageComponent implements OnInit {
 
   isMobile!: boolean;
 
-  constructor(private responsiveService: ResponsiveService, private router: Router) {}
+  constructor(private responsiveService: ResponsiveService, private router: Router) {
+  }
 
   ngOnInit() {
     this.responsiveService.isMobile$.subscribe(isMobile => {
@@ -31,7 +32,7 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-  onGoToQuiz(){
+  onGoToQuiz() {
     this.router.navigateByUrl('questionnaire')
   }
 }

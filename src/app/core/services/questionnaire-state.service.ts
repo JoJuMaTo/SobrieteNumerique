@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Question } from '../models/question';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Question} from '../models/question';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 
@@ -19,6 +19,7 @@ export class QuestionnaireStateService {
 
   constructor(private http: HttpClient) {
   }
+
   setQuestions(questions: Question[]) {
     this.questionsSubject.next(questions);
   }

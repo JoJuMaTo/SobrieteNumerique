@@ -1,48 +1,48 @@
-<div class="question-wrapper" [class.mobile]="isMobile" [@slideInOut]>
+<div [@slideInOut] [class.mobile]="isMobile" class="question-wrapper">
   <h2>{{ question.strQuestion }}</h2>
   <ul>
     <li>
       <label>
-        <input type="radio" name="answer{{ question.id }}"
+        <input (change)="selectAnswer(question.strAnswer1)" [checked]="selectedAnswer === question.strAnswer1"
                [value]="question.strAnswer1"
-               (change)="selectAnswer(question.strAnswer1)"
-               [checked]="selectedAnswer === question.strAnswer1">
+               name="answer{{ question.id }}"
+               type="radio">
         {{ question.strAnswer1 }}
       </label>
     </li>
     <li>
       <label>
-        <input type="radio" name="answer{{ question.id }}"
+        <input (change)="selectAnswer(question.strAnswer2)" [checked]="selectedAnswer === question.strAnswer2"
                [value]="question.strAnswer2"
-               (change)="selectAnswer(question.strAnswer2)"
-               [checked]="selectedAnswer === question.strAnswer2">
+               name="answer{{ question.id }}"
+               type="radio">
         {{ question.strAnswer2 }}
       </label>
     </li>
     <li *ngIf="question.strAnswer3">
       <label>
-        <input type="radio" name="answer{{ question.id }}"
+        <input (change)="selectAnswer(question.strAnswer3)" [checked]="selectedAnswer === question.strAnswer3"
                [value]="question.strAnswer3"
-               (change)="selectAnswer(question.strAnswer3)"
-               [checked]="selectedAnswer === question.strAnswer3">
+               name="answer{{ question.id }}"
+               type="radio">
         {{ question.strAnswer3 }}
       </label>
     </li>
     <li *ngIf="question.strAnswer4">
       <label>
-        <input type="radio" name="answer{{ question.id }}"
+        <input (change)="selectAnswer(question.strAnswer4)" [checked]="selectedAnswer === question.strAnswer4"
                [value]="question.strAnswer4"
-               (change)="selectAnswer(question.strAnswer4)"
-               [checked]="selectedAnswer === question.strAnswer4">
+               name="answer{{ question.id }}"
+               type="radio">
         {{ question.strAnswer4 }}
       </label>
     </li>
     <li *ngIf="question.strAnswer5">
       <label>
-        <input type="radio" name="answer{{ question.id }}"
+        <input (change)="selectAnswer(question.strAnswer5)" [checked]="selectedAnswer === question.strAnswer5"
                [value]="question.strAnswer5"
-               (change)="selectAnswer(question.strAnswer5)"
-               [checked]="selectedAnswer === question.strAnswer5">
+               name="answer{{ question.id }}"
+               type="radio">
         {{ question.strAnswer5 }}
       </label>
     </li>

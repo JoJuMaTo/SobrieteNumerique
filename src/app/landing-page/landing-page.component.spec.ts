@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LandingPageComponent } from './landing-page.component';
+import {LandingPageComponent} from './landing-page.component';
 
 describe('LandingPageComponent', () => {
   let component: LandingPageComponent;
@@ -10,8 +10,8 @@ describe('LandingPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [LandingPageComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(LandingPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

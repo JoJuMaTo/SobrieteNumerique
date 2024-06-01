@@ -1,10 +1,10 @@
 <div class="mainBlock">
   <div class="greetings">
-    <h1 class="greetings-mobile" *ngIf="isMobile">Welcome to mobile version</h1>
+    <h1 *ngIf="isMobile" class="greetings-mobile">Welcome to mobile version</h1>
     <h1 *ngIf="!isMobile">Welcome</h1>
   </div>
   <div class="buttonContainer">
-    <button (click)="onGoToQuiz()" mat-raised-button class="linkButton ButtonOne">Questionnaire</button>
-    <button mat-raised-button class="linkButton ButtonTwo">Bouton 2</button>
+    <button (click)="onGoToQuiz()" class="linkButton ButtonOne" mat-raised-button>Questionnaire</button>
+    <button class="linkButton ButtonTwo" mat-raised-button>Bouton 2</button>
   </div>
 </div>

@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { Question } from '../core/models/question';
-import { QuestionService } from '../core/services/question.service';
-import { QuestionnaireStateService } from '../core/services/questionnaire-state.service';
-import { CommonModule, NgIf } from '@angular/common';
-import { QuestionComponent } from '../question/question.component';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {HttpClientModule} from '@angular/common/http';
+import {Question} from '../core/models/question';
+import {QuestionService} from '../core/services/question.service';
+import {QuestionnaireStateService} from '../core/services/questionnaire-state.service';
+import {CommonModule, NgIf} from '@angular/common';
+import {QuestionComponent} from '../question/question.component';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Router} from "@angular/router";
 
 @Component({
@@ -22,13 +22,13 @@ import {Router} from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('slideInOut', [
-      state('in', style({ transform: 'translateX(0)' })),
+      state('in', style({transform: 'translateX(0)'})),
       transition(':enter', [
-        style({ transform: 'translateX(100%)' }),
+        style({transform: 'translateX(100%)'}),
         animate('300ms ease-in-out')
       ]),
       transition(':leave', [
-        animate('300ms ease-in-out', style({ transform: 'translateX(-100%)' }))
+        animate('300ms ease-in-out', style({transform: 'translateX(-100%)'}))
       ])
     ])
   ]
@@ -94,23 +94,23 @@ export class QuestionnaireComponent implements OnInit {
     if (this.currentQuestionIndex < this.questions.length - 1) {
 
 
-        this.currentQuestionIndex++;
-        this.currentQuestion = this.questions[this.currentQuestionIndex];
-        this.questionKey = this.currentQuestion.id;
-        this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
-        this.cdr.detectChanges();
-            this.triggerAnimation();
+      this.currentQuestionIndex++;
+      this.currentQuestion = this.questions[this.currentQuestionIndex];
+      this.questionKey = this.currentQuestion.id;
+      this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
+      this.cdr.detectChanges();
+      this.triggerAnimation();
     }
   }
 
   previousQuestion() {
     if (this.currentQuestionIndex > 0) {
-        this.currentQuestionIndex--;
-        this.currentQuestion = this.questions[this.currentQuestionIndex];
-        this.questionKey = this.currentQuestion.id;
-        this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
-        this.cdr.detectChanges();
-        this.triggerAnimation();
+      this.currentQuestionIndex--;
+      this.currentQuestion = this.questions[this.currentQuestionIndex];
+      this.questionKey = this.currentQuestion.id;
+      this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
+      this.cdr.detectChanges();
+      this.triggerAnimation();
     }
   }
 

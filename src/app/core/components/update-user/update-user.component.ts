@@ -19,7 +19,7 @@ import {AuthService} from "../../services/auth.service";
   templateUrl: './update-user.component.html',
   styleUrl: './update-user.component.css'
 })
-export class UpdateUserComponent implements OnInit{
+export class UpdateUserComponent implements OnInit {
 
   updateUrl: string = `${environment.apiUrl}/user/update`;
   deleteUrl: string = `${environment.apiUrl}/user/delete`;
@@ -55,23 +55,22 @@ export class UpdateUserComponent implements OnInit{
   }
 
 
-
-  onSubmitUpdateForm(): void{
+  onSubmitUpdateForm(): void {
 
     const userData = {
       ...this.passwordForm.value,
       token: localStorage.getItem('token')
     };
-    console.log("PASSWORD DATA : " + JSON.stringify(userData) )
+    console.log("PASSWORD DATA : " + JSON.stringify(userData))
 
     // return this.http.put<string>(`${this.updateUrl}`,JSON.stringify(userData), {responseType: 'text' as 'json'});
 
-     this.userService.updateUserPassword(userData).pipe(
-       map(result => console.log(result.toString())),
-     ).subscribe();
+    this.userService.updateUserPassword(userData).pipe(
+      map(result => console.log(result.toString())),
+    ).subscribe();
   }
 
-  onSubmitRemovalForm(): void{
+  onSubmitRemovalForm(): void {
 
     const userRemovalData = {
       ...this.accountRemovalForm.value,

@@ -1,4 +1,3 @@
-
 <h1>Modifier mon mot de passe</h1>
 
 <form [formGroup]="passwordForm">
@@ -30,7 +29,8 @@
 
     <div class="action-buttons">
       <button (click)="showModal = true" type="submit">DELETE</button>
-      <app-custom-modal *ngIf="showModal" [message]="'Supprimer mon compte ? Cette opération est irréversible !'" (confirm)="handleConfirmation($event)"></app-custom-modal>
+      <app-custom-modal (confirm)="handleConfirmation($event)" *ngIf="showModal"
+                        [message]="'Supprimer mon compte ? Cette opération est irréversible !'"></app-custom-modal>
     </div>
   </form>
 

@@ -21,30 +21,14 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {
   }
 
-
-
-  private setAuthState(isAuthenticated: boolean, username: string | null): void {
-
-    this.loggedIn.next(isAuthenticated);
-    this.username.next(username);
-    localStorage.setItem('isAuthenticated', isAuthenticated.toString());
-    if (username) {
-      localStorage.setItem('username', username);
-      console.log(localStorage)
-    } else {
-      localStorage.removeItem('username');
-    }
-
-  }
-
   login(credentials: { username: string; password: string }): Observable<string> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     const body = new URLSearchParams();
     body.set('username', credentials.username);
     body.set('password', credentials.password);
 
     console.log("données transmises : " + body);
-    return this.http.post<string>(this.loginUrl, body.toString(), { headers, responseType: 'text' as 'json' })
+    return this.http.post<string>(this.loginUrl, body.toString(), {headers, responseType: 'text' as 'json'})
       .pipe(
         tap(token => {
           localStorage.setItem('token', token);
@@ -58,11 +42,9 @@ export class AuthService {
       );
   }
 
-
   getUsername(): Observable<string | null> {
     return this.username.asObservable();
   }
-
 
   isLoggedIn(): Observable<boolean> {
     return this.loggedIn.asObservable();
@@ -78,5 +60,19 @@ export class AuthService {
     localStorage.removeItem('token');
     this.setAuthState(false, null);
     this.router.navigate(['/']);
+  }
+
+  private setAuthState(isAuthenticated: boolean, username: string | null): void {
+
+    this.loggedIn.next(isAuthenticated);
+    this.username.next(username);
+    localStorage.setItem('isAuthenticated', isAuthenticated.toString());
+    if (username) {
+      localStorage.setItem('username', username);
+      console.log(localStorage)
+    } else {
+      localStorage.removeItem('username');
+    }
+
   }
 }

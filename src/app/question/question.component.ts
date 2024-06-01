@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Question } from '../core/models/question';
-import { NgIf } from '@angular/common';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Question} from '../core/models/question';
+import {NgIf} from '@angular/common';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {ResponsiveService} from "../core/services/responsive.service";
 
 @Component({
@@ -14,13 +14,13 @@ import {ResponsiveService} from "../core/services/responsive.service";
   styleUrls: ['./question.component.scss'],
   animations: [
     trigger('slideInOut', [
-      state('in', style({ transform: 'translateX(0)' })),
+      state('in', style({transform: 'translateX(0)'})),
       transition(':enter', [
-        style({ transform: 'translateX(100%)' }),
+        style({transform: 'translateX(100%)'}),
         animate('500ms ease-in-out')
       ]),
       transition(':leave', [
-        animate('500ms ease-in-out', style({ transform: 'translateX(-100%)' }))
+        animate('500ms ease-in-out', style({transform: 'translateX(-100%)'}))
       ])
     ])
   ]
@@ -47,7 +47,7 @@ export class QuestionComponent implements OnInit {
   }
 
   selectAnswer(answer: string) {
-    this.answerSelected.emit({ questionId: this.question.id, answer });
+    this.answerSelected.emit({questionId: this.question.id, answer});
   }
 
 

@@ -25,9 +25,9 @@ export class HeaderComponent implements OnInit {
 
   isLoggedIn = this.authService.isLoggedIn();
   username$ = this.authService.getUsername();
-  protected readonly RouterLink = RouterLink;
   showModal = false;
   isMobile!: boolean;
+  protected readonly RouterLink = RouterLink;
 
   constructor(private router: Router, private authService: AuthService, private responsiveService: ResponsiveService) {
 
@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
         console.log("Mode desktop détecté");
       }
     });
-
 
 
     localStorage.getItem('username')
@@ -63,6 +62,7 @@ export class HeaderComponent implements OnInit {
   goLogin() {
     this.router.navigateByUrl("/login")
   }
+
   goLogout() {
 
     this.authService.logout();
