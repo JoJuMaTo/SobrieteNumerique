@@ -105,7 +105,7 @@ export class QuestionnaireComponent implements OnInit {
     }
     setTimeout(()=>{
       this.triggerAnimation();
-    },250);
+    },200);
   }
 
   previousQuestion() {
@@ -119,7 +119,7 @@ export class QuestionnaireComponent implements OnInit {
     }
     setTimeout(()=>{
       this.triggerAnimation();
-    },250);
+    },200);
 
   }
 
