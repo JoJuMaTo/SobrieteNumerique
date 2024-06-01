@@ -96,14 +96,16 @@ export class QuestionnaireComponent implements OnInit {
   nextQuestion() {
     if (this.currentQuestionIndex < this.questions.length - 1) {
 
-
       this.currentQuestionIndex++;
       this.currentQuestion = this.questions[this.currentQuestionIndex];
       this.questionKey = this.currentQuestion.id;
       this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
       this.cdr.detectChanges();
-      this.triggerAnimation();
+
     }
+    setTimeout(()=>{
+      this.triggerAnimation();
+    },250);
   }
 
   previousQuestion() {
@@ -113,8 +115,12 @@ export class QuestionnaireComponent implements OnInit {
       this.questionKey = this.currentQuestion.id;
       this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
       this.cdr.detectChanges();
-      this.triggerAnimation();
+
     }
+    setTimeout(()=>{
+      this.triggerAnimation();
+    },250);
+
   }
 
   selectAnswer(event: { questionId: number, answer: string }) {

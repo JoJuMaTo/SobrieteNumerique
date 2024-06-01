@@ -1,7 +1,9 @@
 <div *ngIf="isLoading">Loading...</div>
 <div *ngIf="!isLoading && currentQuestion" class="question-container">
   <mat-progress-bar mode="determinate"
-                    value="{{currentQuestion.id/questions[questions.length-1].id*100}}">
+                    value="{{currentQuestion.id/questions[questions.length-1].id*100}}"
+
+  >
 
   </mat-progress-bar>
   <div *ngIf="questionKey" [@slideInOut]="animationState">
