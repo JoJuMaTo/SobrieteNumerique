@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {Question} from '../models/question';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpResponse} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 
 @Injectable({
@@ -12,6 +12,7 @@ export class QuestionnaireStateService {
   private currentQuestionIndexSubject = new BehaviorSubject<number>(0);
   private selectedAnswersSubject = new BehaviorSubject<{ [key: number]: string }>({});
 
+  answersReturn : Subscription;
   // questions$ = this.questionsSubject.asObservable();
   // currentQuestionIndex$ = this.currentQuestionIndexSubject.asObservable();
   // selectedAnswers$ = this.selectedAnswersSubject.asObservable();
@@ -62,7 +63,7 @@ export class QuestionnaireStateService {
 
     console.log("\n*** DATA ENVOYEE A LA VALIDATION : ***\n" + JSON.stringify(answersToSendArray, null, 2));
 
-    this.http.post(`${environment.apiUrl}/quiz/9/response`, JSON.stringify(answersToSendArray, null, 2)).subscribe();
+    this.answersReturn = this.http.post<HttpResponse<any>>(`${environment.apiUrl}/quiz/9/response`, JSON.stringify(answersToSendArray, null, 2), {responseType: "text" as "json"}).subscribe();
   }
 
 
