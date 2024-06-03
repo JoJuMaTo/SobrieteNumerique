@@ -41,7 +41,7 @@ class QuizController extends AbstractController
         $jsonContent = $serializer->serialize($questions, 'json', ['json_encode_options' => \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE]);
         /*$jsonArray = json_decode($jsonContent, true, 512, JSON_THROW_ON_ERROR);
         print_r($jsonArray);*/
-        return new JsonResponse($jsonContent, 200, [], true);
+        return new JsonResponse($jsonContent, 200, ['Access-Control-Allow-Origin' => '*'], true);
     }
     private function newQuestion(string $question, string $answer1, string $answer2, string $answer3, string $answer4, string $answer5, string $weight1, string $weight2, string $weight3, string $weight4, string $weight5, int $categorieId, int $quizId): QuestionsReponses
     {
@@ -142,7 +142,7 @@ class QuizController extends AbstractController
         $user = $tokenProvider->validateToken($token);
         if($user === null){
 
-            return new Response('Invalid token', Response::HTTP_BAD_REQUEST);
+            return new Response('Invalid token', Response::HTTP_BAD_REQUEST, ['Access-Control-Allow-Origin' => '*']););
         }
         $userId = $user->getId();
         */
@@ -158,6 +158,7 @@ class QuizController extends AbstractController
         $quiz = $repoQuiz->isThereAQuiz($quizId);
         $questionIds = $quiz->getQuestionsIds();
         $i =0;
+        print_r($data."\n");
         foreach($data[$i] as $key => $value) {
             $questionId = $questionIds[$i];
             $respId = $repoQR->findResponseIdByResponseString($value, $questionId, $quizId);
@@ -168,13 +169,14 @@ class QuizController extends AbstractController
             $response->setUserId($userId);
             $response->setQuizId($quizId);
             $response->setWeight($weight);
-
+print_r($respId." ;  ");
             $entityManager->persist($response);
             $entityManager->flush();
             $i++;
         }
 
-        return new Response('QuizResponses recorded', 200);
+        return new Response('QuizResponses recorded', 200,
+            ['Access-Control-Allow-Origin' => '*']);
     }
 
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]

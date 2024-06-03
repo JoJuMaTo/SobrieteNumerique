@@ -5,10 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Security\TokenExtractor;
 use App\Service\TokenProvider;
-use Doctrine\ORM\EntityManager;
+
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
+
 use Random\RandomException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
@@ -88,9 +87,7 @@ class AuthController extends AbstractController
             ['Access-Control-Allow-Origin' => '*']);
     }
 
-    /**
-     * @throws \JsonException
-     */
+
     #[Route('/user/test/connection', name: 'api_auth_test_connection', methods: ['GET'])]
     public function testConnection(Request $request): JsonResponse
     {
@@ -99,12 +96,14 @@ class AuthController extends AbstractController
         try {
             $j= json_decode($js, true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
-            return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+            return new JsonResponse('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST,
+                ['Access-Control-Allow-Origin' => '*']);
         }
         foreach ($j as $k => $v) {
             print_r($v);
         }
-        return new JsonResponse ($js, Response::HTTP_OK);
+        return new JsonResponse ($js, Response::HTTP_OK,
+            ['Access-Control-Allow-Origin' => '*']);
     }
 
 
