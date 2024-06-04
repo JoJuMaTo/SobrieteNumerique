@@ -17,4 +17,6 @@ export class QuestionService {
     console.log('getQuestions called');
     return this.http.get<Question[]>(`${environment.apiUrl}/quiz/9`);
   }
+
+
 }

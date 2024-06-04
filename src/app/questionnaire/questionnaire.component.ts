@@ -8,6 +8,7 @@ import {QuestionComponent} from '../question/question.component';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Router} from "@angular/router";
 import {MatProgressBar, MatProgressBarModule} from "@angular/material/progress-bar";
+import {tap} from "rxjs";
 
 @Component({
   selector: 'app-questionnaire',
@@ -45,6 +46,7 @@ export class QuestionnaireComponent implements OnInit {
   selectedAnswers: { [key: number]: string } = {};
   questionKey: number = 0;
   animationState: string = '';
+  answersOutput: string;
 
   constructor(
     private questionService: QuestionService,
@@ -133,7 +135,21 @@ export class QuestionnaireComponent implements OnInit {
   }
 
   validateAnswers(): void {
-    this.questionnaireStateService.sendSelectedAnswers();
+    this.questionnaireStateService.sendSelectedAnswers().pipe(
+      tap(value => {
+        console.log(value);
+        if (value.body.toString().contains('200')){
+          this.answersOutput = "questionnaire enregistré avec succès" ;
+          this.questionnaireStateService.getScore().pipe(
+            tap(results => console.log("SCORE : " + results.toString(),
+              this.router.navigate(['/score']))),
+
+          ).subscribe();
+        }else if (!value.body.toString().contains('200')) {
+          this.answersOutput = "une erreur est survenue lors de l'envoi du questionnaire" ;
+        }
+      })
+    ).subscribe();
   }
 
   triggerAnimation() {
