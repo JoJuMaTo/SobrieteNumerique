@@ -207,19 +207,20 @@ class QuizController extends AbstractController
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
     public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
-        $token = $tokenExtractor->extractAccessToken($request);
+        /*$token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
         if($user === null){
 
             return new JsonResponse(['error'=> 'Invalid token'], Response::HTTP_BAD_REQUEST);
         }
-        $userId = $user->getId();
+        $userId = $user->getId();*/
+        $userId = 1;
         $score = 0;
-        try {
+        /*try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             return new JsonResponse('error: JsonException - ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
-        }
+        }*/
 
         $userRespRepo = $entityManager->getRepository(UserResponse::class);
         $quizRepo = $entityManager->getRepository(Quiz::class);
