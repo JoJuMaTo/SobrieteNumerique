@@ -5,10 +5,10 @@ namespace App\Controller;
 use App\Entity\QuestionsReponses;
 use App\Entity\Quiz;
 use App\Entity\Score;
-use App\Entity\Reponse;
 use App\Entity\UserResponse;
 use App\Repository\QuestionsReponsesRepository;
 use App\Repository\QuizRepository;
+use App\Repository\UserResponseRepository;
 use App\Security\TokenExtractor;
 use App\Service\TokenProvider;
 use DateTime;
@@ -136,7 +136,7 @@ class QuizController extends AbstractController
     }
 
     #[Route('/quiz/{quizId}/response', name: 'api_quiz_response', methods: ['POST'])]
-    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $quizId, QuizRepository $repoQuiz): Response
+    public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $quizId, QuizRepository $repoQuiz, UserResponseRepository $userRespRepo): Response
     {
         /*$token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
@@ -158,6 +158,7 @@ class QuizController extends AbstractController
 
         //print_r($data."\n");
         $j =0;
+        $this->removePreviousResponses($userId, $quizId, $questionIds, $userRespRepo, $entityManager);
         foreach($data as $question){
             $i =0;
             $questionId = $questionIds[$j];
@@ -171,7 +172,7 @@ class QuizController extends AbstractController
                     $response->setUserId($userId);
                     $response->setQuizId($quizId);
                     $response->setWeight($weight);
-                    //print_r($value." ;  ");
+
                     $entityManager->persist($response);
                     $entityManager->flush();
                 }
@@ -234,5 +235,17 @@ class QuizController extends AbstractController
 
         //$score = $this->makeScore($userId, $id);
         return $this->json(["score" => $score], 200);
+    }
+
+    private function removePreviousResponses(int $userId, int $quizId, ?array $questionIds, $userRespRepo, $entityManager): void
+    {
+        $userResps = $userRespRepo->findAll();
+        foreach($userResps as $userResp){
+            if($userResp->getUserId() === $userId && $userResp->getQuizId() === $quizId){
+                $entityManager->remove($userResp);
+                $entityManager->flush();
+            }
+        }
+
     }
 }
