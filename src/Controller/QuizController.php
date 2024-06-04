@@ -153,31 +153,56 @@ class QuizController extends AbstractController
             return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
-
-
         $quiz = $repoQuiz->isThereAQuiz($quizId);
         $questionIds = $quiz->getQuestionsIds();
-        $i =0;
-        print_r($data."\n");
-        foreach($data[$i] as $key => $value) {
-            $questionId = $questionIds[$i];
-            $respId = $repoQR->findResponseIdByResponseString($value, $questionId, $quizId);
-            $weight = $repoQR->findOneWeightByAnswerId($questionId, $quizId, $value);
-            $response = new UserResponse();
-            $response->setQuestionId($questionId);
-            $response->setChoice($respId);
-            $response->setUserId($userId);
-            $response->setQuizId($quizId);
-            $response->setWeight($weight);
-print_r($respId." ;  ");
-            $entityManager->persist($response);
-            $entityManager->flush();
-            $i++;
-        }
 
-        return new Response('QuizResponses recorded', 200,
-            ['Access-Control-Allow-Origin' => '*']);
+        //print_r($data."\n");
+        $j =0;
+        foreach($data as $question){
+            $i =0;
+            $questionId = $questionIds[$j];
+            foreach($question as $value) {
+                if($i % 2 === 1){
+                    $respId = $repoQR->findResponseIdByResponseString($value, $questionId, $quizId);
+                    $weight = $repoQR->findOneWeightByAnswerId($questionId, $quizId, $value);
+                    $response = new UserResponse();
+                    $response->setQuestionId($questionId);
+                    $response->setChoice($respId);
+                    $response->setUserId($userId);
+                    $response->setQuizId($quizId);
+                    $response->setWeight($weight);
+                    //print_r($value." ;  ");
+                    $entityManager->persist($response);
+                    $entityManager->flush();
+                }
+                $i++;
+            }
+            $j++;
+        }
+        return new Response('QuizResponses recorded', 200, ['Access-Control-Allow-Origin' => '*']);
     }
+
+   /* #[Route('/quiz/{quizId}/testresponse', name: 'api_quiz_testresponse', methods: ['POST'])]
+    public function quizTestResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $quizId, QuizRepository $repoQuiz): Response
+    {
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
+        $i=0;
+        foreach($data as $question) {
+            foreach ($question as $value) {
+                if($i % 2 === 1) {
+                    print_r("\n" . $value . "\n");
+                    //print_r("\n".$data[0]."\n");
+                    //print_r("\n".$data["answer"]);
+                }
+                $i++;
+            }
+        }
+        return new Response('OK', 200);
+    }*/
 
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
     public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
@@ -189,15 +214,24 @@ print_r($respId." ;  ");
             return new JsonResponse(['error'=> 'Invalid token'], Response::HTTP_BAD_REQUEST);
         }
         $userId = $user->getId();
-        //$score = new Score();
+        $score = 0;
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         } catch (JsonException $e) {
             return new JsonResponse('error: JsonException - ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
+        $userRespRepo = $entityManager->getRepository(UserResponse::class);
+        $quizRepo = $entityManager->getRepository(Quiz::class);
+        $quiz = $quizRepo->isThereAQuiz($id);
+        $questionIds = $quiz->getQuestionsIds();
+        foreach($questionIds as $questionId){
+            $resp = $userRespRepo->findUserResponseByUserQuizQuestion($userId, $id, $questionId);
+            $weight = $resp->getWeight();
+            $score += (int)$weight;
+        }
 
-        $score = $this->makeScore($userId, $id);
-        return $this->json(["score" => $score]);
+        //$score = $this->makeScore($userId, $id);
+        return $this->json(["score" => $score], 200);
     }
 }

@@ -15,6 +15,19 @@ class UserResponseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, UserResponse::class);
     }
+    public function findUserResponseByUserQuizQuestion(int $userId, int $quizId, int $questionId): UserResponse
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.userId = :userId')
+            ->andWhere('q.quizId = :quizId')
+            ->andWhere('q.questionId = :questionId')
+            ->setParameter('userId', $userId)
+            ->setParameter('quizId', $quizId)
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+    }
 
     //    /**
     //     * @return UserResponse[] Returns an array of UserResponse objects
