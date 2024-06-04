@@ -14,8 +14,8 @@ export const routes: Routes = [
     path: 'questionnaire',
     loadComponent: () => import('./questionnaire/questionnaire.component').then(mod => mod.QuestionnaireComponent)
   },
-  {path: 'login', component: LoginComponent,},
-  { path: 'score', component: ScoreComponent },
+  {path: 'login', component: LoginComponent},
+  {path: 'score', component: ScoreComponent},
   {path: 'user/create', component: NewUserComponent},
   {path: 'user/updatepassword', component: UpdateUserComponent},
 
