@@ -125,8 +125,9 @@ class QuizController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            return new JsonResponse(['error' => 'Invalid JSON: ' . $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+        catch (JsonException $e) {
+            return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
         $quiz = $this->newQuiz($data['titre'], $data['description']);
         $entityManager->persist($quiz);
@@ -138,18 +139,19 @@ class QuizController extends AbstractController
     #[Route('/quiz/{quizId}/response', name: 'api_quiz_response', methods: ['POST'])]
     public function quizResponse(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, QuestionsReponsesRepository $repoQR, int $quizId, QuizRepository $repoQuiz, UserResponseRepository $userRespRepo): Response
     {
-        /*$token = $tokenExtractor->extractAccessToken($request);
+        $token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
         if($user === null){
 
-            return new Response('Invalid token', Response::HTTP_BAD_REQUEST, ['Access-Control-Allow-Origin' => '*']););
+            return new Response('Invalid token', Response::HTTP_BAD_REQUEST, ['Access-Control-Allow-Origin' => '*']);
         }
         $userId = $user->getId();
-        */
-        $userId=1;
+
+        //$userId=1;
         try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        }
+        catch (JsonException $e) {
             return new Response('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
         }
 
@@ -208,14 +210,14 @@ class QuizController extends AbstractController
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
     public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
-        /*$token = $tokenExtractor->extractAccessToken($request);
+        $token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
         if($user === null){
 
             return new JsonResponse(['error'=> 'Invalid token'], Response::HTTP_BAD_REQUEST);
         }
-        $userId = $user->getId();*/
-        $userId = 1;
+        $userId = $user->getId();
+        //$userId = 1;
         $score = 0;
         /*try {
             $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -230,7 +232,16 @@ class QuizController extends AbstractController
         foreach($questionIds as $questionId){
             $resp = $userRespRepo->findUserResponseByUserQuizQuestion($userId, $id, $questionId);
             $weight = $resp->getWeight();
-            $score += (int)$weight;
+            $categorieId = $resp->getCategorieId();
+            $response = $this->client->request('POST', 'http://localhost:8000/api', [
+                'headers' => [
+                    'Access-Control-Allow-Origin' => '*',
+                ],
+                'categorieId' => $categorieId,
+                'value' => $weight,
+            ]);
+            $value = $response->getContent();
+            $score += (int)$value;
         }
 
         //$score = $this->makeScore($userId, $id);
