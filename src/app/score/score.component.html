@@ -1,10 +1,7 @@
 <div class="score-container">
-  <h2>Votre Score "Empreinte Carbon"</h2>
+  <h2>Votre Score "Empreinte Carbone"</h2>
   <div *ngIf="score$ | async as score">
     <p>Your score is: {{ score }}</p>
   </div>
-  <div *ngIf="advice$ | async as advice">
-    <h3>Conseils pour améliorer votre score : </h3>
-    <p>{{ advice }}</p>
-  </div>
+
 </div>

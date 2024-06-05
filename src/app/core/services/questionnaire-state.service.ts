@@ -15,7 +15,7 @@ export class QuestionnaireStateService {
   private scoreSubject = new BehaviorSubject<number>(0);
 
 
-  answersReturn : Subscription;
+  // answersReturn : Subscription;
   // questions$ = this.questionsSubject.asObservable();
   // currentQuestionIndex$ = this.currentQuestionIndexSubject.asObservable();
   // selectedAnswers$ = this.selectedAnswersSubject.asObservable();
@@ -50,13 +50,6 @@ export class QuestionnaireStateService {
     return this.selectedAnswersSubject.value;
   }
 
-  // sendSelectedAnswers(): void {
-  //   const answersToSendArray = Object.entries(this.selectedAnswersSubject.getValue()).map(([key, value]) => ({ [key]: value }));
-  //   console.log("\n*** DATA ENVOYEE A LA VALIDATION : ***\n" + JSON.stringify(answersToSendArray, null, 2));
-  //   this.http.post(`${environment.apiUrl}/quiz/9/response`, JSON.stringify(answersToSendArray, null, 2)).subscribe();
-  //
-  //
-  // }
 
   sendSelectedAnswers(): Observable<HttpResponse<any>> {
     const answersToSendArray = Object.entries(this.selectedAnswersSubject.getValue()).map(([key, value]) => ({
