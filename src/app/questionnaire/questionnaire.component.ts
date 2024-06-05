@@ -137,17 +137,17 @@ export class QuestionnaireComponent implements OnInit {
   validateAnswers(): void {
     this.questionnaireStateService.sendSelectedAnswers().pipe(
       tap(value => {
-        console.log(value);
-        if (value.body.toString().contains('200')){
+        //console.log(value);
+        //if (value.body.toString().contains('200')){
           this.answersOutput = "questionnaire enregistré avec succès" ;
           this.questionnaireStateService.getScore().pipe(
             tap(results => console.log("SCORE : " + results.toString(),
               this.router.navigate(['/score']))),
 
           ).subscribe();
-        }else if (!value.body.toString().contains('200')) {
-          this.answersOutput = "une erreur est survenue lors de l'envoi du questionnaire" ;
-        }
+    //    }else if (!value.body.toString().contains('200')) {
+       //   this.answersOutput = "une erreur est survenue lors de l'envoi du questionnaire" ;
+      //  }
       })
     ).subscribe();
   }

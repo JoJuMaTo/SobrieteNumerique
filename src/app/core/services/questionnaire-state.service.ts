@@ -72,7 +72,7 @@ export class QuestionnaireStateService {
 
 
   getScore(): Observable<number> {
-    this.http.get<number>(`${environment.apiUrl}/quiz/9/score`, {responseType: 'text' as 'json'}).subscribe((response: any) => {
+    this.http.get<number>(`${environment.apiUrl}/quiz/9/score`, {responseType: 'json'}).subscribe((response: any) => {
     this.scoreSubject.next(response.score);
     });
     return this.scoreSubject.asObservable();
