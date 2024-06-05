@@ -19,10 +19,8 @@ class ImpactCo2ApiController extends AbstractController
     ) {
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     */
-    #[Route('/api/{categorieId}', name: 'api_call_impactco2', methods: ['POST'])]
+
+    #[Route('/api', name: 'api_call_impactco2', methods: ['POST'])]
     public function apiCallImpactCo2(int $categorieId, Request $request): Response
     {
         try {
@@ -35,7 +33,7 @@ class ImpactCo2ApiController extends AbstractController
         $value = $data['value'];
         $cat = 100 - (int)$value;
         if($categorieId === 101 || $categorieId === 104 || $categorieId === 111 || $categorieId === 115){
-            //Avion
+            //Avion Voiture thermique Metro Train
                 $response = $this->client->request('GET', 'https://impactco2.fr/api/v1/transport?km='.$value.'&displayAll=1&transports='.$cat.'&ignoreRadiativeForcing=0&numberOfPassenger=1&includeConstruction=1', [
                     'headers' => [
                         'Accept' => 'application/json',
@@ -60,7 +58,7 @@ class ImpactCo2ApiController extends AbstractController
         //$jsonContent = $this->json([ "data" => "data"]);
         //$datas = $response->get('data');
 
-        /*foreach($datas as $data){*/
+        /*foreach($datas as $data){
             try {
                 $dat = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
             } catch (JsonException $e) {
@@ -70,6 +68,7 @@ class ImpactCo2ApiController extends AbstractController
 
 
         return new Response($dat["data"][0]["value"], 200, ['Access-Control-Allow-Origin' => '*'], true);
+            */
     }
 
     /*private function CallAPI($method, $url, $data = false)

@@ -115,4 +115,14 @@ class QuestionsReponsesRepository extends ServiceEntityRepository
                 default => 0
             };
     }
+    public function findCategorieIdByQuestionId(int $id): ?int
+    {
+        $res = $this->createQueryBuilder('q')
+            ->where('q.id = :id')
+
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $res->getCategoryId();
+    }
 }

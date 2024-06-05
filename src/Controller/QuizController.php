@@ -23,10 +23,15 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
 class QuizController extends AbstractController
 {
+    public function __construct(
+        private HttpClientInterface $client,
+    ) {
+    }
     #[Route('/quiz/{id}', name: 'api_quiz_getall', methods: ['GET'])]
     public function quizGetAllQuestions(string $id, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -227,12 +232,13 @@ class QuizController extends AbstractController
 
         $userRespRepo = $entityManager->getRepository(UserResponse::class);
         $quizRepo = $entityManager->getRepository(Quiz::class);
+        $qRRepo = $entityManager->getRepository(QuestionsReponses::class);
         $quiz = $quizRepo->isThereAQuiz($id);
         $questionIds = $quiz->getQuestionsIds();
         foreach($questionIds as $questionId){
             $resp = $userRespRepo->findUserResponseByUserQuizQuestion($userId, $id, $questionId);
             $weight = $resp->getWeight();
-            $categorieId = $resp->getCategorieId();
+            $categorieId = $qRRepo->findCategorieIdByQuestionId($questionId);
             $response = $this->client->request('POST', 'http://localhost:8000/api', [
                 'headers' => [
                     'Access-Control-Allow-Origin' => '*',
