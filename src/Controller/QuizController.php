@@ -14,6 +14,7 @@ use App\Service\TokenProvider;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpClient\Psr18Client;
 use Symfony\Component\HttpFoundation\Exception\JsonException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,10 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 
@@ -212,6 +217,12 @@ class QuizController extends AbstractController
         return new Response('OK', 200);
     }*/
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
     public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
@@ -235,23 +246,41 @@ class QuizController extends AbstractController
         $qRRepo = $entityManager->getRepository(QuestionsReponses::class);
         $quiz = $quizRepo->isThereAQuiz($id);
         $questionIds = $quiz->getQuestionsIds();
+        $s = "";
         foreach($questionIds as $questionId){
             $resp = $userRespRepo->findUserResponseByUserQuizQuestion($userId, $id, $questionId);
             $weight = $resp->getWeight();
             $categorieId = $qRRepo->findCategorieIdByQuestionId($questionId);
-            $response = $this->client->request('POST', 'http://localhost:8000/api', [
-                'headers' => [
-                    'Access-Control-Allow-Origin' => '*',
-                ],
-                'categorieId' => $categorieId,
-                'value' => $weight,
-            ]);
-            $value = $response->getContent();
-            $score += (int)$value;
+
+            $cat = 100 - (int)$categorieId;
+            if($categorieId === 101 || $categorieId === 104 || $categorieId === 111 || $categorieId === 115){
+                //Avion /Voiture thermique /Metro /Train
+                $response = $this->client->request('GET', 'https://impactco2.fr/api/v1/transport?km='.$weight.'&displayAll=1&transports='.$cat.'&ignoreRadiativeForcing=0&numberOfPassenger=1&includeConstruction=1', [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer 55fd7a60-542f-4999-bbd0-ba623e50de32',
+                        'Access-Control-Allow-Origin' => '*',
+                    ],
+                ]);
+                try {
+                    $dat = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+                } catch (JsonException $e) {
+                    return new JsonResponse('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
+                }
+                //$value = $response->getContent();
+                foreach($dat["data"] as $el){
+                    $value = $el[0]["value"];
+                    $score +=(float)$value*$weight;
+                }
+                //$s += $dat["data"][0];
+                //$score += (int)$dat["data"]["value"];
+            }
         }
 
         //$score = $this->makeScore($userId, $id);
         return $this->json(["score" => $score], 200);
+        //return new JsonResponse(['score' => $dat["data"][0]["value"]], 200, ['Access-Control-Allow-Origin' => '*'], true);
+
     }
 
     private function removePreviousResponses(int $userId, int $quizId, ?array $questionIds, $userRespRepo, $entityManager): void
