@@ -103,11 +103,10 @@ export class QuestionnaireComponent implements OnInit {
       this.questionKey = this.currentQuestion.id;
       this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
       this.cdr.detectChanges();
+      this.triggerAnimation();
 
     }
-    setTimeout(()=>{
-      this.triggerAnimation();
-    },200);
+
   }
 
   previousQuestion() {
@@ -117,11 +116,9 @@ export class QuestionnaireComponent implements OnInit {
       this.questionKey = this.currentQuestion.id;
       this.questionnaireStateService.setCurrentQuestionIndex(this.currentQuestionIndex);
       this.cdr.detectChanges();
+      this.triggerAnimation();
 
     }
-    setTimeout(()=>{
-      this.triggerAnimation();
-    },200);
 
   }
 
