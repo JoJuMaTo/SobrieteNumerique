@@ -29,7 +29,7 @@ use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-
+use Psr\Log\LoggerInterface;
 
 class QuizController extends AbstractController
 {
@@ -224,8 +224,9 @@ class QuizController extends AbstractController
      * @throws ClientExceptionInterface
      */
     #[Route('/quiz/{id}/score', name: 'api_quiz_score', methods: ['GET'])]
-    public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id): JsonResponse
+    public function quizScore(Request $request, TokenExtractor $tokenExtractor, TokenProvider $tokenProvider, EntityManagerInterface $entityManager, int $id, LoggerInterface $logger): JsonResponse
     {
+        $logger->debug("Start Score");
         $token = $tokenExtractor->extractAccessToken($request);
         $user = $tokenProvider->validateToken($token);
         if($user === null){
@@ -248,14 +249,17 @@ class QuizController extends AbstractController
         $questionIds = $quiz->getQuestionsIds();
         $s = "";
         foreach($questionIds as $questionId){
+            $logger->debug("Starting Question ".$questionId);
             $resp = $userRespRepo->findUserResponseByUserQuizQuestion($userId, $id, $questionId);
             $weight = $resp->getWeight();
             $categorieId = $qRRepo->findCategorieIdByQuestionId($questionId);
 
-            $cat = 100 - (int)$categorieId;
+            $cat = (int)$categorieId-100;
             if($categorieId === 101 || $categorieId === 104 || $categorieId === 111 || $categorieId === 115){
                 //Avion /Voiture thermique /Metro /Train
-                $response = $this->client->request('GET', 'https://impactco2.fr/api/v1/transport?km='.$weight.'&displayAll=1&transports='.$cat.'&ignoreRadiativeForcing=0&numberOfPassenger=1&includeConstruction=1', [
+                $response = $this->client->request('GET', 'https://impactco2.fr/api/v1/transport?km='.(string)$weight.'&displayAll=0&transports='.(string)$cat.'&ignoreRadiativeForcing=0&numberOfPassenger=1&includeConstruction=1', [
+
+                //https://impactco2.fr/api/v1/transport?km='.$weight.'&displayAll=1&transports='.$cat.'&ignoreRadiativeForcing=0&numberOfPassenger=1&includeConstruction=1', [
                     'headers' => [
                         'Accept' => 'application/json',
                         'Authorization' => 'Bearer 55fd7a60-542f-4999-bbd0-ba623e50de32',
@@ -268,11 +272,23 @@ class QuizController extends AbstractController
                     return new JsonResponse('Invalid JSON: ' . $e->getMessage(), Response::HTTP_BAD_REQUEST);
                 }
                 //$value = $response->getContent();
-                foreach($dat["data"] as $el){
-                    $value = $el[0]["value"];
-                    $score +=(float)$value*$weight;
+                $logger->debug("Before");
+                $logger->debug("Data : ".$response->getContent());
+                $i =0;
+                if (!empty($dat["data"])) {
+                    // Calculer le score
+                    foreach ($dat["data"] as $el) {
+                        $value = $el["value"];
+                        $score += (float)$value * $weight;
+                        $logger->critical('value = ' . (string)$value);
+                        $logger->critical('score = ' . (string)$score);
+                        $i++;
+                    }
+                } else {
+                    $logger->warning("No data found in JSON response");
                 }
-                //$s += $dat["data"][0];
+                $logger->debug("Nb fois dans dat['data'] = ".(string)$i);
+                //$s += $dat["data"]["value];
                 //$score += (int)$dat["data"]["value"];
             }
         }
